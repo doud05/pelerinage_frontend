@@ -29,10 +29,14 @@ jobs:
       # 4. Déployer sur le serveur distant
       - name: Deploy to Server
         run: |
-          echo "Connecting to server: ${{ secrets.SERVER_HOST }}"
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "rm -rf /var/www/temp/*"
-          scp -r dist/* ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/var/www/temp/
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "mv /var/www/temp/* /var/www/html/"
+          - name: Deploy to Server
+  run: |
+    ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
+      rm -rf /var/www/temp/*;
+      rm -rf /var/www/html/*" # Supprime les anciens fichiers avant le déplacement
+    scp -r dist/* ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/var/www/temp/
+    ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
+      mv /var/www/temp/* /var/www/html/"
 
       # 5. Confirmation de déploiement
       - name: Confirm successful deployment
