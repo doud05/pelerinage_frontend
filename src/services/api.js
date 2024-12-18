@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5000/api'; // Remplacez par l'URL de votre backend
+const API_BASE_URL = 'http://pelerinagesdegap.fr/api'; // Remplacez par l'URL de votre backend
 
 // Configuration par défaut d'axios
 const api = axios.create({
