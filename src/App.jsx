@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import RegisterForm from './components/Auth/RegisterForm';
 import Dashboard from './pages/Dashboard';
 import Users from './pages/Users';
 import NotFound from './pages/NotFound';
