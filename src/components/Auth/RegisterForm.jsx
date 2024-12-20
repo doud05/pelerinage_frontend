@@ -7,42 +7,60 @@ const RegisterForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch('http://localhost:9100/api/utilisateurs/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password, role }),
-    });
-    const data = await response.json();
-    if (response.ok) {
-      console.log('Inscription réussie:', data);
-    } else {
-      console.error(data.message);
+    try {
+      const response = await fetch('http://localhost:9100/api/utilisateurs/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, role }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message);
+      console.log('Inscription réussie :', data);
+    } catch (error) {
+      console.error('Erreur lors de l’inscription :', error);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
-      <input
-        type="password"
-        placeholder="Mot de passe"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
-      <select value={role} onChange={(e) => setRole(e.target.value)}>
-        <option value="utilisateur">Utilisateur</option>
-        <option value="admin">Administrateur</option>
-      </select>
-      <button type="submit">S'inscrire</button>
-    </form>
-  );
-};
-
-export default RegisterForm;
+    <form
+      onSubmit={handleSubmit}
+      className="bg-offwhite shadow-card p-6 rounded-lg"
+    >
+      <h2 className="text-xl font-classic text-brick mb-4">Inscription</h2>
+      <div className="mb-4">
+        <label htmlFor="email" className="block text-dark font-medium mb-1">
+          Email
+        </label>
+        <input
+          type="email"
+          id="email"
+          placeholder="Entrez votre email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          className="w-full border border-lightgray rounded-lg p-2"
+        />
+      </div>
+      <div className="mb-4">
+        <label htmlFor="password" className="block text-dark font-medium mb-1">
+          Mot de passe
+        </label>
+        <input
+          type="password"
+          id="password"
+          placeholder="Entrez votre mot de passe"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          className="w-full border border-lightgray rounded-lg p-2"
+        />
+      </div>
+      <div className="mb-4">
+        <label htmlFor="role" className="block text-dark font-medium mb-1">
+          Rôle
+        </label>
+        <select
+          id="role"
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          
