@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from './pages/Login';
-import Register from './pages/Register';
+import Login from './components/Auth/LoginForm'; // Correction du chemin
+import Register from './components/Auth/RegisterForm'; // Correction du chemin
 import Dashboard from './pages/Dashboard/PelerinDashboard';
 import NotFound from './pages/NotFound';
 import PrivateRoute from './routes/PrivateRoute';
