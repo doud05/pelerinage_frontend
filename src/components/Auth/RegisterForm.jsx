@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 
+/**
+ * Formulaire d'inscription avec gestion des états locaux et envoi des données à l'API.
+ */
 const RegisterForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -14,53 +17,69 @@ const RegisterForm = () => {
         body: JSON.stringify({ email, password, role }),
       });
       const data = await response.json();
-      if (!response.ok) throw new Error(data.message);
-      console.log('Inscription réussie :', data);
+      if (response.ok) {
+        console.log('Inscription réussie:', data);
+      } else {
+        console.error('Erreur lors de l\'inscription:', data.message);
+      }
     } catch (error) {
-      console.error('Erreur lors de l’inscription :', error);
+      console.error('Erreur réseau:', error);
     }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="bg-offwhite shadow-card p-6 rounded-lg"
-    >
-      <h2 className="text-xl font-classic text-brick mb-4">Inscription</h2>
-      <div className="mb-4">
-        <label htmlFor="email" className="block text-dark font-medium mb-1">
+    <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
+      <h2 className="text-2xl font-bold mb-4 text-center text-brick">Créer un compte</h2>
+      <div>
+        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
           Email
         </label>
         <input
-          type="email"
           id="email"
-          placeholder="Entrez votre email"
+          type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="w-full border border-lightgray rounded-lg p-2"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brick focus:ring-brick sm:text-sm"
+          placeholder="Votre email"
         />
       </div>
-      <div className="mb-4">
-        <label htmlFor="password" className="block text-dark font-medium mb-1">
+      <div>
+        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
           Mot de passe
         </label>
         <input
-          type="password"
           id="password"
-          placeholder="Entrez votre mot de passe"
+          type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          className="w-full border border-lightgray rounded-lg p-2"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brick focus:ring-brick sm:text-sm"
+          placeholder="Votre mot de passe"
         />
       </div>
-      <div className="mb-4">
-        <label htmlFor="role" className="block text-dark font-medium mb-1">
+      <div>
+        <label htmlFor="role" className="block text-sm font-medium text-gray-700">
           Rôle
         </label>
         <select
           id="role"
           value={role}
           onChange={(e) => setRole(e.target.value)}
-          
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brick focus:ring-brick sm:text-sm"
+        >
+          <option value="utilisateur">Utilisateur</option>
+          <option value="admin">Administrateur</option>
+        </select>
+      </div>
+      <button
+        type="submit"
+        className="w-full bg-brick text-white py-2 px-4 rounded-lg hover:bg-terracotta focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brick"
+      >
+        S'inscrire
+      </button>
+    </form>
+  );
+};
+
+export default RegisterForm;
