@@ -18,15 +18,14 @@ const AuthProvider = ({ children }) => {
 
   const logoutUser = () => {
     logout();
+    localStorage.removeItem('token'); // Supprimer le token JWT
     setUser(null);
   };
 
   useEffect(() => {
-    // Vérifiez si un utilisateur est déjà connecté via le token
     const token = localStorage.getItem('token');
     if (token) {
-      // Vous pourriez appeler une API pour récupérer les détails utilisateur
-      setUser({ token }); // Pour l'instant, on utilise uniquement le token
+      setUser({ token }); // Placeholder pour le token, pourrait être remplacé par une requête utilisateur
     }
   }, []);
 
