@@ -8,19 +8,16 @@ const RegisterForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/utilisateurs/register`, {
+      const response = await fetch('http://localhost:9100/api/utilisateurs/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, role }),
       });
       const data = await response.json();
-      if (response.ok) {
-        console.log('Inscription réussie:', data);
-      } else {
-        console.error('Erreur:', data.message);
-      }
+      if (!response.ok) throw new Error(data.message);
+      console.log('Inscription réussie :', data);
     } catch (error) {
-      console.error('Erreur réseau:', error);
+      console.error('Erreur lors de l’inscription :', error);
     }
   };
 
