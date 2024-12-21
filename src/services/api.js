@@ -38,15 +38,21 @@ api.interceptors.response.use(
 // Fonction de connexion
 export const login = async (credentials) => {
   try {
-    console.log('Tentative de connexion avec :', credentials); // Log des informations d'entrée
-    const { data } = await api.post('/utilisateurs/login', credentials); // Utilise la route correcte
-    console.log('Réponse du backend :', data); // Log de la réponse pour débogage
-    return data; // Retourne les données reçues
+    const { data } = await api.post('/login', credentials);
+    console.log('Réponse brute du backend :', data);
+
+    // Vérification que la réponse contient les données nécessaires
+    if (!data || !data.token || !data.user) {
+      throw new Error('Réponse du backend invalide.');
+    }
+
+    return data;
   } catch (error) {
-    console.error('Erreur lors de la connexion :', error.response?.data?.message || error.message);
-    throw new Error(error.response?.data?.message || 'Erreur lors de la tentative de connexion.');
+    console.error('Erreur lors de l’appel API de connexion :', error.message);
+    throw new Error(error.response?.data?.message || 'Erreur lors de la connexion.');
   }
 };
+
 
 // Fonction d'inscription
 export const register = async (userData) => {
