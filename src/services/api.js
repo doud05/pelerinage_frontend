@@ -37,21 +37,30 @@ api.interceptors.response.use(
 
 // Fonction de connexion
 export const login = async (credentials) => {
-  console.log('Tentative de connexion avec :', credentials); // Log de test
-  const { data } = await api.post('/login', credentials);
-  console.log('Réponse du backend :', data); // Log de test
-  return data;
+  try {
+    console.log('Tentative de connexion avec :', credentials); // Log des informations d'entrée
+    const { data } = await api.post('/utilisateurs/login', credentials); // Utilise la route correcte
+    console.log('Réponse du backend :', data); // Log de la réponse pour débogage
+    return data; // Retourne les données reçues
+  } catch (error) {
+    console.error('Erreur lors de la connexion :', error.response?.data?.message || error.message);
+    throw new Error(error.response?.data?.message || 'Erreur lors de la tentative de connexion.');
+  }
 };
 
 // Fonction d'inscription
 export const register = async (userData) => {
   try {
-    const { data } = await api.post('/register', userData);
-    return data;
+    console.log('Tentative d’inscription avec :', userData); // Log des informations d'entrée
+    const { data } = await api.post('/utilisateurs/register', userData); // Utilise la route correcte
+    console.log('Réponse du backend :', data); // Log de la réponse pour débogage
+    return data; // Retourne les données reçues
   } catch (error) {
+    console.error('Erreur lors de l’inscription :', error.response?.data?.message || error.message);
     throw new Error(error.response?.data?.message || 'Erreur lors de l’inscription.');
   }
 };
+
 
 // Fonction de déconnexion
 export const logout = () => {
