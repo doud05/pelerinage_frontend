@@ -4,20 +4,21 @@ const RegisterForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('utilisateur');
-    
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:9100/api/utilisateurs/register', {
+      const response = await fetch('https://resa.pelerinagesdegap.fr/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, role }),
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.message);
-      console.log('Inscription réussie :', data);
+      alert('Inscription réussie. Vous pouvez vous connecter.');
     } catch (error) {
-      console.error('Erreur lors de l’inscription :', error);
+      alert('Erreur lors de l’inscription. Veuillez réessayer.');
+      console.error('Erreur lors de l’inscription :', error.message);
     }
   };
 
