@@ -7,16 +7,16 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   const loginUser = async (credentials) => {
-    try {
-      const data = await login(credentials);
-      localStorage.setItem('token', data.token);
-      const userProfile = await fetchUserProfile();
-      setUser(userProfile);
-    } catch (error) {
-      console.error('Erreur de connexion :', error.message);
-      throw error;
-    }
-  };
+  try {
+    const data = await login(credentials);
+    localStorage.setItem('token', data.token);
+    setUser(data.user); // Utilise directement l'utilisateur renvoyé par le backend
+  } catch (error) {
+    console.error('Erreur de connexion :', error.message);
+    throw error;
+  }
+};
+
 
   const logoutUser = () => {
     logout();
