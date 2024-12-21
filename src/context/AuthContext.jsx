@@ -13,6 +13,7 @@ const AuthProvider = ({ children }) => {
       setUser(data.user); // Mettre à jour l'utilisateur connecté
     } catch (error) {
       console.error('Erreur de connexion :', error);
+      throw error;
     }
   };
 
@@ -25,7 +26,8 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      setUser({ token }); // Placeholder pour le token, pourrait être remplacé par une requête utilisateur
+      // Option : effectuer une requête au backend pour valider le token et obtenir l'utilisateur
+      setUser({ token }); // Placeholder pour simplifier
     }
   }, []);
 
