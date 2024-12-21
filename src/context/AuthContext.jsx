@@ -6,7 +6,7 @@ export const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  const loginUser = async (credentials) => {
+ const loginUser = async (credentials) => {
   try {
     const data = await login(credentials);
 
@@ -14,16 +14,13 @@ const AuthProvider = ({ children }) => {
       throw new Error('Réponse invalide du backend.');
     }
 
-    // Stocker le token et mettre à jour l'utilisateur
-    localStorage.setItem('token', data.token);
-    setUser(data.user);
+    localStorage.setItem('token', data.token); // Stocke le token
+    setUser(data.user); // Met à jour l'utilisateur connecté
   } catch (error) {
     console.error('Erreur de connexion :', error.message);
     throw error;
   }
 };
-
-
 
   const logoutUser = () => {
     logout();
