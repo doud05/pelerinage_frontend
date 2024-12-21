@@ -42,14 +42,14 @@ export const login = async (credentials) => {
     console.log('Réponse brute du backend :', data);
 
     // Vérification que la réponse contient les données nécessaires
-    if (!data || !data.token || !data.user) {
-      throw new Error('Réponse du backend invalide.');
+    if (!data.token || !data.user) {
+      throw new Error('La réponse du serveur ne contient pas les propriétés attendues.');
     }
 
-    return data;
+   return data;
   } catch (error) {
-    console.error('Erreur lors de l’appel API de connexion :', error.message);
-    throw new Error(error.response?.data?.message || 'Erreur lors de la connexion.');
+    console.error('Erreur lors de la connexion :', error.response?.data || error.message);
+    throw error;
   }
 };
 
