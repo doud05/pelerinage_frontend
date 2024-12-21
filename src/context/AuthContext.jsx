@@ -9,13 +9,20 @@ const AuthProvider = ({ children }) => {
   const loginUser = async (credentials) => {
   try {
     const data = await login(credentials);
+
+    if (!data || !data.token || !data.user) {
+      throw new Error('Réponse invalide du backend.');
+    }
+
+    // Stocker le token et mettre à jour l'utilisateur
     localStorage.setItem('token', data.token);
-    setUser(data.user); // Utilise directement l'utilisateur renvoyé par le backend
+    setUser(data.user);
   } catch (error) {
     console.error('Erreur de connexion :', error.message);
     throw error;
   }
 };
+
 
 
   const logoutUser = () => {
