@@ -4,7 +4,7 @@ const RegisterForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('utilisateur');
-
+    
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
