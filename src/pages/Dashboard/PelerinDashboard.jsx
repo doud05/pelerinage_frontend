@@ -3,7 +3,7 @@ import DashboardLayout from '../../components/Dashboard/DashboardLayout';
 import { AuthContext } from '../../context/AuthContext';
 
 const PelerinDashboard = () => {
-  const { user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);   
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
