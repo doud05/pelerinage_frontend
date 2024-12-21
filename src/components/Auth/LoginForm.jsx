@@ -6,16 +6,14 @@ const LoginForm = () => {
   const [password, setPassword] = useState('');
   const { loginUser } = useContext(AuthContext);
 
-  if (!loginUser) {
-    console.error('AuthContext non initialisé.');
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await loginUser({ email, password });
+      alert('Connexion réussie !');
     } catch (error) {
-      console.error('Erreur lors de la connexion :', error);
+      alert('Erreur de connexion. Veuillez vérifier vos informations.');
+      console.error('Erreur lors de la connexion :', error.message);
     }
   };
 
