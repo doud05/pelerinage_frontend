@@ -1,10 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from './components/Auth/LoginForm'; // Chemin corrigé
-import Register from './components/Auth/RegisterForm'; // Chemin corrigé
-import Dashboard from './pages/Dashboard/PelerinDashboard';
+import Login from './components/Auth/LoginForm';
+import Register from './components/Auth/RegisterForm';
+import Dashboard from './pages/Dashboard';
 import NotFound from './pages/NotFound';
-import PrivateRoute from './routes/PrivateRoute';
+import PrivateRoute from './routes/PrivateRoute'; // Vérifiez l'implémentation de PrivateRoute
 
 const App = () => {
   return (
