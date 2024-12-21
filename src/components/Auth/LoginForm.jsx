@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 
 const LoginForm = () => {
-  const [email, setEmail] = useState('');  
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { loginUser } = useContext(AuthContext); // Accéder au contexte d'authentification
 
