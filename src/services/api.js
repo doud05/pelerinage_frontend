@@ -37,12 +37,10 @@ api.interceptors.response.use(
 
 // Fonction de connexion
 export const login = async (credentials) => {
-  try {
-    const { data } = await api.post('/login', credentials);
-    return data;
-  } catch (error) {
-    throw new Error(error.response?.data?.message || 'Erreur lors de la connexion.');
-  }
+  console.log('Tentative de connexion avec :', credentials); // Log de test
+  const { data } = await api.post('/login', credentials);
+  console.log('Réponse du backend :', data); // Log de test
+  return data;
 };
 
 // Fonction d'inscription
