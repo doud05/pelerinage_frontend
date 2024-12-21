@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 
-const RegisterForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [role, setRole] = useState('utilisateur');
+const response = await fetch('https://resa.pelerinagesdegap.fr/api/register', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ email, password, role }),
+});
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
