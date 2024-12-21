@@ -38,7 +38,7 @@ api.interceptors.response.use(
 // Fonction de connexion
 export const login = async (credentials) => {
   try {
-    const { data } = await api.post('/login', credentials);
+    const { data } = await api.post('/utilisateurs/login', credentials);
     console.log('Réponse brute du backend :', data);
 
     // Vérification que la réponse contient les données nécessaires
