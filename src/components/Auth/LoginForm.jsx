@@ -4,7 +4,11 @@ import { AuthContext } from '../../context/AuthContext';
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { loginUser } = useContext(AuthContext); // Accéder au contexte d'authentification
+  const { loginUser } = useContext(AuthContext);
+
+  if (!loginUser) {
+    console.error('AuthContext non initialisé.');
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
