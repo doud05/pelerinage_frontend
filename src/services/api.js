@@ -12,7 +12,7 @@ const api = axios.create({
 
 // Ajout automatique du token JWT pour toutes les requêtes
 api.interceptors.request.use((config) => {
-  if (!config.url.endsWith('/authController/login')) {
+  if (!config.url.endsWith('/Auth/login')) {
     const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -40,7 +40,7 @@ api.interceptors.response.use(
 // Fonction de connexion
 export const login = async (credentials) => {
   try {
-    const { data } = await api.post('/authController/login', credentials);
+    const { data } = await api.post('/Auth/login', credentials);
     console.log('Réponse brute du backend :', data);
 
     // Vérification que la réponse contient les données nécessaires
