@@ -12,7 +12,7 @@ const api = axios.create({
 
 // Ajout automatique du token JWT pour toutes les requêtes
 api.interceptors.request.use((config) => {
-  if (!config.url.endsWith('/Auth/login')) {
+  if (!config.url.endsWith('/auth/login')) {
     const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -40,7 +40,7 @@ api.interceptors.response.use(
 // Fonction de connexion
 export const login = async (credentials) => {
   try {
-    const { data } = await api.post('/Auth/login', credentials);
+    return await api.post('/auth/login', credentials);
     console.log('Réponse brute du backend :', data);
 
     // Vérification que la réponse contient les données nécessaires
@@ -60,7 +60,7 @@ export const login = async (credentials) => {
 export const register = async (userData) => {
   try {
     console.log('Tentative d’inscription avec :', userData); // Log des informations d'entrée
-    const { data } = await api.post('/utilisateurs/register', userData); // Utilise la route correcte
+    return await api.post('/auth/register', userData);  // Utilise la route correcte
     console.log('Réponse du backend :', data); // Log de la réponse pour débogage
     return data; // Retourne les données reçues
   } catch (error) {
