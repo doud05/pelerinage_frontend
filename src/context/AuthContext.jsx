@@ -10,10 +10,10 @@ const AuthProvider = ({ children }) => {
     try {
       const data = await login(credentials);
       localStorage.setItem('token', data.token);
-      const userProfile = await fetchUserProfile(); // Récupérer les infos utilisateur après la connexion
+      const userProfile = await fetchUserProfile();
       setUser(userProfile);
     } catch (error) {
-      console.error('Erreur de connexion :', error);
+      console.error('Erreur de connexion :', error.message);
       throw error;
     }
   };
@@ -30,8 +30,8 @@ const AuthProvider = ({ children }) => {
         const profile = await fetchUserProfile();
         setUser(profile);
       } catch (error) {
-        console.error('Erreur lors de la récupération du profil utilisateur :', error);
-        logoutUser(); // Déconnecter l'utilisateur si le token est invalide
+        console.error('Erreur lors de la récupération du profil utilisateur :', error.message);
+        logoutUser();
       }
     };
 
