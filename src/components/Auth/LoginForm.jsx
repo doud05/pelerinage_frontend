@@ -11,6 +11,7 @@ const LoginForm = () => {
     try {
       await loginUser({ email, password });
       alert('Connexion réussie !');
+      window.location.href = '/dashboard'; // Rediriger vers une page après connexion
     } catch (error) {
       alert('Erreur de connexion. Veuillez vérifier vos informations.');
       console.error('Erreur lors de la connexion :', error.message);
