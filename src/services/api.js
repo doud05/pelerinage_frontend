@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://resa.pelerinagesdegap.fr/api'; // URL de votre backend
+const API_BASE_URL = import.meta.env.VITE_API_URL;// URL de votre backend
 
 // Configuration par défaut d'axios
 const api = axios.create({
