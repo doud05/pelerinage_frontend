@@ -3,22 +3,20 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
 const PrivateRoute = ({ allowedRoles = [] }) => {
-  const { user } = useContext(AuthContext); // Accès à l'utilisateur connecté
+  const { user } = useContext(AuthContext);
 
-  // Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
+  // Redirection si l'utilisateur n'est pas connecté
   if (!user) {
-    console.warn("Utilisateur non connecté.");
+    console.warn('Utilisateur non connecté. Redirection vers /login.');
     return <Navigate to="/login" replace />;
   }
 
-  // Si le rôle de l'utilisateur n'est pas autorisé, redirige vers l'accueil
+  // Redirection si le rôle n'est pas autorisé
   if (allowedRoles.length && !allowedRoles.includes(user.role)) {
-    console.warn(`Rôle non autorisé : ${user.role}`);
+    console.warn(`Rôle non autorisé : ${user.role}. Redirection vers /.`);
     return <Navigate to="/" replace />;
   }
 
-
-  // Si tout va bien, rend le contenu protégé
   return <Outlet />;
 };
 
