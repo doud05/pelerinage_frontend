@@ -22,11 +22,14 @@ const LoginRegister = () => {
         console.log('Tentative de connexion avec :', { email, password });
         const response = await loginUser({ email, password });
         console.log('Réponse du login :', response);
+
+        // Validation avant redirection
         if (!response.user || !response.user.role) {
           throw new Error('Utilisateur ou rôle introuvable.');
         }
-        alert('Connexion réussie !');
-        navigate(`/dashboard/${response.user.role}`); // Redirection selon le rôle
+
+        console.log('Redirection vers :', `/dashboard/${response.user.role}`);
+        navigate(`/dashboard/${response.user.role}`);
       }
     } catch (error) {
       console.error('Erreur lors de la soumission :', error.message);
