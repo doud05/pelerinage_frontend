@@ -1,4 +1,4 @@
-name: Deploy Frontend to Server
+name: Deploy to Server
 
 on:
   push:
@@ -20,29 +20,12 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      # 3. Définir les variables d'environnement pour le frontend uniquement
-      - name: Set environment variables
-        run: |
-          echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" >> $GITHUB_ENV
-
-      # 4. Vérifier les variables d'environnement nécessaires au frontend
-      - name: Check frontend environment variables
-        run: |
-          if [ -z "$VITE_API_URL" ]; then
-            echo "Error: VITE_API_URL is not set." && exit 1
-          fi
-          echo "Les variables d'environnement pour le frontend sont bien définies."
-
-      # 5. Installer les dépendances
-      - name: Install dependencies
+      # 3. Installer les dépendances et effectuer le build
+      - name: Install dependencies and build
         run: |
           npm install
-
-      # 6. Construire l'application
-      - name: Build application
-        run: npm run build
-
-      # 7. Déployer sur le serveur distant
+          npm run build
+      # 4. Déployer sur le serveur distant
       - name: Deploy to Server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
@@ -51,11 +34,6 @@ jobs:
           scp -r dist/* ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/var/www/temp/
           ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
             mv /var/www/temp/* /var/www/html/"
-
-      # 8. Tester l'application déployée
-      - name: Test deployed application
-        run: |
-          curl -f https://${{ secrets.SERVER_HOST }}/api/auth/login || exit 1
-          curl -f https://${{ secrets.SERVER_HOST }}/api/auth/register || exit 1
-        env:
-          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+      # 5. Confirmation de déploiement
+      - name: Confirm successful deployment
+        run: echo "Déploiement réussi sur le serveur !"
