@@ -13,10 +13,9 @@ const AuthProvider = ({ children }) => {
       const data = await login(credentials);
       localStorage.setItem('token', data.token); // Stockage du token dans localStorage
       setUser(data.user); // Mise à jour de l'utilisateur connecté
-        // Vérifiez si data.user contient bien un rôle
-    if (!data.user || !data.user.role) {
-      throw new Error("Rôle utilisateur introuvable.");
-    }
+      if (!data.user || !data.user.role) {
+        throw new Error('Rôle utilisateur introuvable.');
+      }
     } catch (error) {
       console.error('Erreur de connexion :', error.message);
       throw error; // Rejet en cas d'échec pour affichage de l'erreur
@@ -43,32 +42,25 @@ const AuthProvider = ({ children }) => {
   };
 
   // Chargement du profil utilisateur à partir du token
-useEffect(() => {
-  const fetchProfile = async () => {
-    try {
-      const profile = await fetchUserProfile(); // Récupère le profil depuis l'API
-      if (!profile || !profile.user || !profile.user.role) {
-        throw new Error('Profil utilisateur invalide ou rôle introuvable.');
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const profile = await fetchUserProfile(); // Récupère le profil depuis l'API
+        if (!profile || !profile.user || !profile.user.role) {
+          throw new Error('Profil utilisateur invalide ou rôle introuvable.');
+        }
+        setUser(profile.user); // Met à jour l'état utilisateur avec les détails du profil
+      } catch (error) {
+        console.error('Erreur lors de la récupération du profil :', error.message);
+        logoutUser(); // Déconnexion en cas d'erreur
       }
-      setUser(profile.user); // Met à jour l'état utilisateur avec les détails du profil
-    } catch (error) {
-      console.error('Erreur lors de la récupération du profil :', error.message);
-      logoutUser(); // Déconnexion en cas d'erreur
-    }
-  };
+    };
 
-  const token = localStorage.getItem('token'); // Vérifie si un token est présent
-  if (token) {
-    fetchProfile(); // Charge le profil utilisateur
-  }
-}, []);
-
-
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token'); // Vérifie si un token est présent
     if (token) {
-      fetchProfile();
+      fetchProfile(); // Charge le profil utilisateur
     }
-  }, []);
+  }, []); // Fin correcte du useEffect
 
   return (
     <AuthContext.Provider value={{ user, loginUser, registerUser, logoutUser }}>
@@ -77,4 +69,4 @@ useEffect(() => {
   );
 };
 
-export default AuthProvider; 
+export default AuthProvider;
