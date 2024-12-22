@@ -1,4 +1,4 @@
-import axios from 'axios';
+ import axios from 'axios';
 
 // Base URL de l'API (configurée dans .env)
 const API_BASE_URL = import.meta.env.VITE_API_URL;
@@ -15,7 +15,7 @@ api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = Bearer ${token};
     }
     return config;
   },
@@ -77,7 +77,7 @@ export const getAllUsers = async () => {
  * @returns {Object} Utilisateur mis à jour
  */
 export const updateUserRole = async (userId, role) => {
-  const { data } = await api.put(`/users/${userId}/role`, { role });
+  const { data } = await api.put(/users/${userId}/role, { role });
   return data;
 };
 
@@ -87,7 +87,7 @@ export const updateUserRole = async (userId, role) => {
  * @returns {Object} Données du tableau de bord
  */
 export const getDashboardData = async (role) => {
-  const { data } = await api.get(`/dashboard/${role}`);
+  const { data } = await api.get(/dashboard/${role});
   return data;
 };
 
@@ -110,4 +110,28 @@ export const createReservation = async (reservationData) => {
   return data;
 };
 
-export default api;
+export default api;   src/routes/PrivateRoute.jsx : import React, { useContext } from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
+
+const PrivateRoute = ({ allowedRoles = [] }) => {
+  const { user } = useContext(AuthContext); // Accès à l'utilisateur connecté
+
+  // Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
+  if (!user) {
+    console.warn("Utilisateur non connecté.");
+    return <Navigate to="/login" replace />;
+  }
+
+  // Si le rôle de l'utilisateur n'est pas autorisé, redirige vers l'accueil
+  if (allowedRoles.length && !allowedRoles.includes(user.role)) {
+    console.warn(Rôle non autorisé : ${user.role});
+    return <Navigate to="/" replace />;
+  }
+
+
+  // Si tout va bien, rend le contenu protégé
+  return <Outlet />;
+};
+
+export default PrivateRoute;   
