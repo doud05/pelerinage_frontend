@@ -1,4 +1,4 @@
- import axios from 'axios';
+import axios from 'axios';
 
 // Base URL de l'API (configurée dans .env)
 const API_BASE_URL = import.meta.env.VITE_API_URL;
@@ -15,7 +15,7 @@ api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
     if (token) {
-      config.headers.Authorization = Bearer ${token};
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
@@ -24,8 +24,6 @@ api.interceptors.request.use(
 
 /**
  * @description Connexion utilisateur
- * @param {Object} credentials - Les informations de connexion (email et mot de passe)
- * @returns {Object} Données utilisateur et token
  */
 export const login = async (credentials) => {
   const { data } = await api.post('/auth/login', credentials);
@@ -34,9 +32,6 @@ export const login = async (credentials) => {
 
 /**
  * @description Inscription utilisateur
- * Attribue un rôle par défaut ('pelerin') si non spécifié.
- * @param {Object} userData - Les informations d'inscription (email, mot de passe)
- * @returns {Object} Données utilisateur et token
  */
 export const register = async (userData) => {
   const { data } = await api.post('/auth/register', { ...userData, role: 'pelerin' });
@@ -45,7 +40,6 @@ export const register = async (userData) => {
 
 /**
  * @description Récupère le profil utilisateur authentifié
- * @returns {Object} Données du profil utilisateur
  */
 export const fetchUserProfile = async () => {
   const { data } = await api.get('/auth/profile');
@@ -54,46 +48,29 @@ export const fetchUserProfile = async () => {
 
 /**
  * @description Déconnexion utilisateur
- * Supprime le token local
  */
 export const logout = () => {
   localStorage.removeItem('token');
 };
 
 /**
- * @description Récupère tous les utilisateurs (administrateur uniquement)
- * @returns {Array} Liste des utilisateurs
- */
-export const getAllUsers = async () => {
-  const { data } = await api.get('/users');
-  return data;
-};
-
-/**
  * @description Met à jour le rôle d'un utilisateur
- * (administrateur uniquement)
- * @param {number} userId - ID de l'utilisateur
- * @param {string} role - Nouveau rôle (e.g., 'admin', 'gestionnaire', 'pelerin')
- * @returns {Object} Utilisateur mis à jour
  */
 export const updateUserRole = async (userId, role) => {
-  const { data } = await api.put(/users/${userId}/role, { role });
+  const { data } = await api.put(`/users/${userId}/role`, { role });
   return data;
 };
 
 /**
- * @description Récupère les données du tableau de bord spécifique à un rôle
- * @param {string} role - Le rôle de l'utilisateur ('admin', 'gestionnaire', 'pelerin')
- * @returns {Object} Données du tableau de bord
+ * @description Récupère les données du tableau de bord
  */
 export const getDashboardData = async (role) => {
-  const { data } = await api.get(/dashboard/${role});
+  const { data } = await api.get(`/dashboard/${role}`);
   return data;
 };
 
 /**
- * @description Récupère les réservations de l'utilisateur authentifié
- * @returns {Array} Liste des réservations
+ * @description Récupère les réservations
  */
 export const getUserReservations = async () => {
   const { data } = await api.get('/reservations');
@@ -101,37 +78,11 @@ export const getUserReservations = async () => {
 };
 
 /**
- * @description Crée une réservation pour un pèlerin
- * @param {Object} reservationData - Données de la réservation
- * @returns {Object} Réservation créée
+ * @description Crée une réservation
  */
 export const createReservation = async (reservationData) => {
   const { data } = await api.post('/reservations', reservationData);
   return data;
 };
 
-export default api;   src/routes/PrivateRoute.jsx : import React, { useContext } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
-
-const PrivateRoute = ({ allowedRoles = [] }) => {
-  const { user } = useContext(AuthContext); // Accès à l'utilisateur connecté
-
-  // Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
-  if (!user) {
-    console.warn("Utilisateur non connecté.");
-    return <Navigate to="/login" replace />;
-  }
-
-  // Si le rôle de l'utilisateur n'est pas autorisé, redirige vers l'accueil
-  if (allowedRoles.length && !allowedRoles.includes(user.role)) {
-    console.warn(Rôle non autorisé : ${user.role});
-    return <Navigate to="/" replace />;
-  }
-
-
-  // Si tout va bien, rend le contenu protégé
-  return <Outlet />;
-};
-
-export default PrivateRoute;   
+export default api;
