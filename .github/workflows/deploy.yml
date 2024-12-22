@@ -3,7 +3,7 @@ name: Deploy to Server
 on:
   push:
     branches:
-      - main  # Exécuter uniquement sur la branche principale
+      - main
 
 jobs:
   build-and-deploy:
@@ -20,13 +20,25 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      # 3. Installer les dépendances et effectuer le build
-      - name: Install dependencies and build
+      # 3. Vérifier les variables d'environnement
+      - name: Check environment variables
+        run: |
+          if [ -z "$VITE_API_URL" ]; then
+            echo "Error: VITE_API_URL is not set." && exit 1
+          fi
+          echo "Les variables d'environnement sont bien définies."
+
+      # 4. Installer les dépendances et effectuer les tests
+      - name: Install dependencies and run tests
         run: |
           npm install
-          npm run build
+          npm test
 
-      # 4. Déployer sur le serveur distant
+      # 5. Construire l'application
+      - name: Build application
+        run: npm run build
+
+      # 6. Déployer sur le serveur distant
       - name: Deploy to Server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
@@ -36,6 +48,9 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
             mv /var/www/temp/* /var/www/html/"
 
-      # 5. Confirmation de déploiement
-      - name: Confirm successful deployment
-        run: echo "Déploiement réussi sur le serveur !"
+      # 7. Tester l'application déployée
+      - name: Test deployed application
+        run: |
+          curl -f https://${{ secrets.SERVER_HOST }}/api/auth/login || exit 1
+          curl -f https://${{ secrets.SERVER_HOST }}/api/auth/register || exit 1
+          echo "Déploiement réussi et tests post-déploiement passés."
