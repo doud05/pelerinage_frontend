@@ -1,0 +1,41 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main  # Exécuter uniquement sur la branche principale
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Vérifier le code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Configurer l'accès SSH
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      # 3. Installer les dépendances et effectuer le build
+      - name: Install dependencies and build
+        run: |
+          npm install
+          npm run build
+
+      # 4. Déployer sur le serveur distant
+      - name: Deploy to Server
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
+            rm -rf /var/www/temp/*;
+            rm -rf /var/www/html/*"
+          scp -r dist/* ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/var/www/temp/
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
+            mv /var/www/temp/* /var/www/html/"
+
+      # 5. Confirmation de déploiement
+      - name: Confirm successful deployment
+        run: echo "Déploiement réussi sur le serveur !"
