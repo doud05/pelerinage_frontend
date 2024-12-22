@@ -13,19 +13,24 @@ const LoginRegister = () => {
     e.preventDefault();
     try {
       if (isRegister) {
+        console.log('Tentative d’inscription avec :', { email, password });
         const response = await registerUser({ email, password });
-        console.log('Réponse du register:', response); // Log pour vérifier la réponse
+        console.log('Réponse du register :', response);
         alert('Inscription réussie !');
         setIsRegister(false); // Passe en mode connexion après inscription
       } else {
+        console.log('Tentative de connexion avec :', { email, password });
         const response = await loginUser({ email, password });
-        console.log('Réponse du login:', response); // Log pour vérifier la réponse
+        console.log('Réponse du login :', response);
+        if (!response.user || !response.user.role) {
+          throw new Error('Utilisateur ou rôle introuvable.');
+        }
         alert('Connexion réussie !');
         navigate(`/dashboard/${response.user.role}`); // Redirection selon le rôle
       }
     } catch (error) {
       console.error('Erreur lors de la soumission :', error.message);
-      alert('Erreur : ' + error.message); // Affiche l'erreur dans une alerte
+      alert(`Erreur : ${error.message}`);
     }
   };
 
