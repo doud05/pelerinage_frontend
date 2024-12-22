@@ -6,22 +6,22 @@ const LoginRegister = () => {
   const [isRegister, setIsRegister] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { loginUser } = useContext(AuthContext); // Fonction de connexion
-  const navigate = useNavigate(); // Hook pour naviguer après connexion
+  const { loginUser, registerUser } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (isRegister) {
         const response = await registerUser({ email, password });
-        console.log("Réponse du register :", response);
+        console.log('Réponse du register:', response);
         alert('Inscription réussie !');
-        setIsRegister(false);
+        setIsRegister(false); // Passe en mode connexion après inscription
       } else {
         const response = await loginUser({ email, password });
-        console.log("Réponse du login :", response);
+        console.log('Réponse du login:', response);
         alert('Connexion réussie !');
-        navigate(`/dashboard/${response.user.role}`); // Redirection basée sur le rôle
+        navigate(`/dashboard/${response.user.role}`); // Redirection selon le rôle
       }
     } catch (error) {
       console.error('Erreur lors de la soumission :', error.message);
@@ -52,10 +52,7 @@ const LoginRegister = () => {
           />
         </label>
         <button type="submit">{isRegister ? "S'inscrire" : 'Se connecter'}</button>
-        <button
-          type="button"
-          onClick={() => setIsRegister(!isRegister)}
-        >
+        <button type="button" onClick={() => setIsRegister(!isRegister)}>
           {isRegister
             ? 'Déjà un compte ? Connectez-vous'
             : "Pas de compte ? Inscrivez-vous"}
