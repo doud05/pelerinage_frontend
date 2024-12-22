@@ -1,4 +1,4 @@
-export default DashboardAdmin;  src/pages/DashboardGestionnaire.jsx : import React from 'react';
+import React from 'react';
 
 const DashboardGestionnaire = () => {
   return (
@@ -9,4 +9,4 @@ const DashboardGestionnaire = () => {
   );
 };
 
-export default;
+export default DashboardGestionnaire;
