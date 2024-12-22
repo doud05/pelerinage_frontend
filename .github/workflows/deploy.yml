@@ -3,7 +3,7 @@ name: Deploy to Server
 on:
   push:
     branches:
-      - main
+      - main  # Exécuter uniquement sur la branche principale
 
 jobs:
   build-and-deploy:
@@ -20,7 +20,13 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      # 3. Vérifier les variables d'environnement
+      # 3. Définir les variables d'environnement
+      - name: Set environment variables
+        run: |
+          echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" >> $GITHUB_ENV
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
+
+      # 4. Vérifier les variables d'environnement
       - name: Check environment variables
         run: |
           if [ -z "$VITE_API_URL" ]; then
@@ -28,17 +34,17 @@ jobs:
           fi
           echo "Les variables d'environnement sont bien définies."
 
-      # 4. Installer les dépendances et effectuer les tests
+      # 5. Installer les dépendances et effectuer les tests
       - name: Install dependencies and run tests
         run: |
           npm install
           npm test
 
-      # 5. Construire l'application
+      # 6. Construire l'application
       - name: Build application
         run: npm run build
 
-      # 6. Déployer sur le serveur distant
+      # 7. Déployer sur le serveur distant
       - name: Deploy to Server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
@@ -48,7 +54,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
             mv /var/www/temp/* /var/www/html/"
 
-      # 7. Tester l'application déployée
+      # 8. Tester l'application déployée
       - name: Test deployed application
         run: |
           curl -f https://${{ secrets.SERVER_HOST }}/api/auth/login || exit 1
