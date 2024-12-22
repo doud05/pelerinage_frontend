@@ -6,29 +6,26 @@ const LoginRegister = () => {
   const [isRegister, setIsRegister] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { loginUser } = useContext(AuthContext); // Fonction de connexion
-  const navigate = useNavigate(); // Hook pour naviguer après connexion
+  const { loginUser, registerUser } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    if (isRegister) {
-      const response = await registerUser({ email, password });
-      console.log("Réponse du register :", response);
-      alert('Inscription réussie !');
-      setIsRegister(false);
-    } else {
-      const response = await loginUser({ email, password });
-      console.log("Réponse du login :", response);
-      alert('Connexion réussie !');
-      navigate(`/dashboard/${response.user.role}`); // Redirection basée sur le rôle
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (isRegister) {
+        const response = await registerUser({ email, password });
+        alert('Inscription réussie !');
+        navigate(`/dashboard/${response.user.role}`); // Redirection après inscription
+      } else {
+        const user = await loginUser({ email, password });
+        alert('Connexion réussie !');
+        navigate(`/dashboard/${user.role}`); // Redirection après connexion
+      }
+    } catch (error) {
+      console.error('Erreur lors de la soumission :', error.message);
+      alert(`Erreur : ${error.message}`);
     }
-  } catch (error) {
-    console.error('Erreur lors de la soumission :', error.message);
-    alert('Erreur : ' + error.message);
-  }
-};
-
+  };
 
   return (
     <div className="form-container">
@@ -58,8 +55,8 @@ const handleSubmit = async (e) => {
           onClick={() => setIsRegister(!isRegister)}
         >
           {isRegister
-            ? 'Déjà un compte ? Connectez-vous'
-            : "Pas de compte ? Inscrivez-vous"}
+            ? 'Déjà un compte ? Connectez-vous'
+            : "Pas de compte ? Inscrivez-vous"}
         </button>
       </form>
     </div>
