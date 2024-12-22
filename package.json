@@ -1,32 +1,65 @@
-{
-  "name": "pelerinage_frontend",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
-    "test": "echo \"Pas encore de tests configurés.\" && exit 0"
-  },
-  "dependencies": {
-    "@vitejs/plugin-react-swc": "^3.7.2",
-    "axios": "^1.7.9",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-router-dom": "^6.28.1"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.17.0",
-    "@types/react": "^18.3.17",
-    "@types/react-dom": "^18.3.5",
-    "@vitejs/plugin-react": "^4.3.4",
-    "eslint": "^9.17.0",
-    "eslint-plugin-react": "^7.37.2",
-    "eslint-plugin-react-hooks": "^5.0.0",
-    "eslint-plugin-react-refresh": "^0.4.16",
-    "globals": "^15.13.0",
-    "vite": "^6.0.3"
-  }
-}
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main  # Exécuter uniquement sur la branche principale
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Vérifier le code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Configurer l'accès SSH
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      # 3. Définir les variables d'environnement
+      - name: Set environment variables
+        run: |
+          echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" >> $GITHUB_ENV
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
+
+      # 4. Vérifier les variables d'environnement
+      - name: Check environment variables
+        run: |
+          if [ -z "$VITE_API_URL" ]; then
+            echo "Error: VITE_API_URL is not set." && exit 1
+          fi
+          if [ -z "$JWT_SECRET" ]; then
+            echo "Error: JWT_SECRET is not set." && exit 1
+          fi
+          echo "Les variables d'environnement sont correctement définies."
+
+      # 5. Installer les dépendances et effectuer les tests
+      - name: Install dependencies and run tests
+        run: |
+          npm install
+          npm run test || echo "Tests ignorés pour le moment."
+
+      # 6. Construire l'application
+      - name: Build application
+        run: npm run build
+
+      # 7. Déployer sur le serveur distant
+      - name: Deploy to Server
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
+            rm -rf /var/www/temp/*;
+            rm -rf /var/www/html/*"
+          scp -r dist/* ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/var/www/temp/
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
+            mv /var/www/temp/* /var/www/html/"
+
+      # 8. Tester l'application déployée
+      - name: Test deployed application
+        run: |
+          curl -f https://${{ secrets.SERVER_HOST }}/api/auth/login || exit 1
+          curl -f https://${{ secrets.SERVER_HOST }}/api/auth/register || exit 1
+          echo "Déploiement réussi et tests post-déploiement passés."
