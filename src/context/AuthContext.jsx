@@ -12,12 +12,19 @@ const AuthProvider = ({ children }) => {
       console.log('Tentative de connexion avec :', credentials);
       const data = await login(credentials);
       console.log('Réponse reçue pour login :', data);
+
+      // Validation des données
       if (!data.user || !data.user.role) {
-        throw new Error('Utilisateur ou rôle introuvable.');
+        throw new Error('Utilisateur ou rôle introuvable dans la réponse.');
       }
+
       localStorage.setItem('token', data.token); // Stockage du token
-      setUser(data.user); // Mise à jour de l'utilisateur connecté
-      return data;
+      console.log('Token stocké dans localStorage :', localStorage.getItem('token'));
+
+      setUser(data.user); // Mise à jour de l'utilisateur
+      console.log('Utilisateur défini dans le contexte :', data.user);
+
+      return data; // Retourne les données pour utilisation dans LoginRegister
     } catch (error) {
       console.error('Erreur de connexion :', error.message);
       throw error;
@@ -39,6 +46,7 @@ const AuthProvider = ({ children }) => {
   const logoutUser = () => {
     logout();
     localStorage.removeItem('token');
+    console.log('Token supprimé de localStorage.');
     setUser(null);
   };
 
@@ -47,10 +55,14 @@ const AuthProvider = ({ children }) => {
       try {
         const profile = await fetchUserProfile();
         console.log('Profil utilisateur récupéré :', profile);
+
+        // Validation des données
         if (!profile || !profile.user || !profile.user.role) {
           throw new Error('Profil utilisateur invalide ou rôle introuvable.');
         }
+
         setUser(profile.user);
+        console.log('Utilisateur chargé dans le contexte :', profile.user);
       } catch (error) {
         console.error('Erreur lors de la récupération du profil :', error.message);
         logoutUser();
@@ -59,7 +71,8 @@ const AuthProvider = ({ children }) => {
 
     const token = localStorage.getItem('token');
     if (token) {
-      fetchProfile();
+      console.log('Token trouvé dans localStorage :', token);
+      fetchProfile(); // Charge le profil utilisateur si le token est présent
     }
   }, []);
 
