@@ -1,75 +1,70 @@
-import React, { createContext, useState, useEffect } from 'react';
-import { login, register, fetchUserProfile, logout } from '../services/api';
+import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 
-// Création du contexte d'authentification
-export const AuthContext = createContext();
+const LoginRegister = () => {
+  const [isRegister, setIsRegister] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const { loginUser, registerUser } = useContext(AuthContext); // Accès aux fonctions du contexte
+  const navigate = useNavigate();
 
-const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // Stockage des informations utilisateur
-
-  // Fonction de connexion
-  const loginUser = async (credentials) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      const data = await login(credentials);
-      console.log('Données reçues du backend pour login :', data); // Log pour déboguer la réponse
-      if (!data.user || !data.user.role) {
-        throw new Error('Rôle utilisateur introuvable.');
-      }
-      localStorage.setItem('token', data.token); // Stockage du token dans localStorage
-      setUser(data.user); // Mise à jour de l'utilisateur connecté
-      return data; // Retourne les données pour utilisation dans LoginRegister
-    } catch (error) {
-      console.error('Erreur de connexion :', error.message);
-      throw error; // Rejet en cas d'échec pour affichage de l'erreur
-    }
-  };
-
-  // Fonction d'inscription
-  const registerUser = async (userData) => {
-    try {
-      const data = await register(userData);
-      console.log('Inscription réussie :', data); // Log pour vérifier la réponse
-      return data;
-    } catch (error) {
-      console.error('Erreur lors de l’inscription :', error.message);
-      throw error;
-    }
-  };
-
-  // Fonction de déconnexion
-  const logoutUser = () => {
-    logout();
-    localStorage.removeItem('token'); // Suppression du token
-    setUser(null); // Réinitialisation de l'état utilisateur
-  };
-
-  // Chargement du profil utilisateur à partir du token
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const profile = await fetchUserProfile(); // Récupère le profil depuis l'API
-        console.log('Profil utilisateur récupéré :', profile); // Log pour déboguer la réponse
-        if (!profile || !profile.user || !profile.user.role) {
-          throw new Error('Profil utilisateur invalide ou rôle introuvable.');
+      if (isRegister) {
+        console.log('Tentative d’inscription avec :', { email, password });
+        const response = await registerUser({ email, password });
+        console.log('Réponse du register :', response);
+        alert('Inscription réussie !');
+        setIsRegister(false); // Passe en mode connexion après inscription
+      } else {
+        console.log('Tentative de connexion avec :', { email, password });
+        const response = await loginUser({ email, password });
+        console.log('Réponse du login :', response);
+        if (!response.user || !response.user.role) {
+          throw new Error('Utilisateur ou rôle introuvable.');
         }
-        setUser(profile.user); // Met à jour l'état utilisateur avec les détails du profil
-      } catch (error) {
-        console.error('Erreur lors de la récupération du profil :', error.message);
-        logoutUser(); // Déconnexion en cas d'erreur
+        alert('Connexion réussie !');
+        navigate(`/dashboard/${response.user.role}`); // Redirection selon le rôle
       }
-    };
-
-    const token = localStorage.getItem('token'); // Vérifie si un token est présent
-    if (token) {
-      fetchProfile(); // Charge le profil utilisateur
+    } catch (error) {
+      console.error('Erreur lors de la soumission :', error.message);
+      alert(`Erreur : ${error.message}`);
     }
-  }, []); // Fin correcte du useEffect
+  };
 
   return (
-    <AuthContext.Provider value={{ user, loginUser, registerUser, logoutUser }}>
-      {children}
-    </AuthContext.Provider>
+    <div className="form-container">
+      <form onSubmit={handleSubmit}>
+        <h2>{isRegister ? 'Inscription' : 'Connexion'}</h2>
+        <label>
+          Email:
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          Mot de passe:
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </label>
+        <button type="submit">{isRegister ? "S'inscrire" : 'Se connecter'}</button>
+        <button type="button" onClick={() => setIsRegister(!isRegister)}>
+          {isRegister
+            ? 'Déjà un compte ? Connectez-vous'
+            : "Pas de compte ? Inscrivez-vous"}
+        </button>
+      </form>
+    </div>
   );
 };
 
-export default AuthProvider;
+export default LoginRegister;
