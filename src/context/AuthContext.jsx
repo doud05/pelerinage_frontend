@@ -11,12 +11,13 @@ const AuthProvider = ({ children }) => {
   const loginUser = async (credentials) => {
     try {
       const data = await login(credentials);
-      
+      console.log('Données reçues du backend pour login :', data); // Log pour déboguer la réponse
       if (!data.user || !data.user.role) {
         throw new Error('Rôle utilisateur introuvable.');
       }
       localStorage.setItem('token', data.token); // Stockage du token dans localStorage
       setUser(data.user); // Mise à jour de l'utilisateur connecté
+      return data; // Retourne les données pour utilisation dans LoginRegister
     } catch (error) {
       console.error('Erreur de connexion :', error.message);
       throw error; // Rejet en cas d'échec pour affichage de l'erreur
@@ -27,7 +28,7 @@ const AuthProvider = ({ children }) => {
   const registerUser = async (userData) => {
     try {
       const data = await register(userData);
-      console.log('Inscription réussie :', data);
+      console.log('Inscription réussie :', data); // Log pour vérifier la réponse
       return data;
     } catch (error) {
       console.error('Erreur lors de l’inscription :', error.message);
@@ -47,6 +48,7 @@ const AuthProvider = ({ children }) => {
     const fetchProfile = async () => {
       try {
         const profile = await fetchUserProfile(); // Récupère le profil depuis l'API
+        console.log('Profil utilisateur récupéré :', profile); // Log pour déboguer la réponse
         if (!profile || !profile.user || !profile.user.role) {
           throw new Error('Profil utilisateur invalide ou rôle introuvable.');
         }
