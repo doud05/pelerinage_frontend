@@ -11,8 +11,11 @@ const App = () => {
   return (
     <Router>
       <Routes>
+        {/* Page d'accueil (connexion ou inscription) */}
         <Route path="/" element={<LoginRegister />} />
         <Route path="/login" element={<LoginRegister />} />
+
+        {/* Tableau de bord pour les pèlerins */}
         <Route
           path="/dashboard/pelerin"
           element={
@@ -21,6 +24,8 @@ const App = () => {
             </PrivateRoute>
           }
         />
+
+        {/* Tableau de bord pour les gestionnaires */}
         <Route
           path="/dashboard/gestionnaire"
           element={
@@ -29,6 +34,8 @@ const App = () => {
             </PrivateRoute>
           }
         />
+
+        {/* Tableau de bord pour les administrateurs */}
         <Route
           path="/dashboard/admin"
           element={
@@ -37,6 +44,8 @@ const App = () => {
             </PrivateRoute>
           }
         />
+
+        {/* Page non trouvée */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
