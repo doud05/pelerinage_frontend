@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
@@ -6,26 +6,29 @@ const LoginRegister = () => {
   const [isRegister, setIsRegister] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { loginUser, registerUser } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const { loginUser } = useContext(AuthContext); // Fonction de connexion
+  const navigate = useNavigate(); // Hook pour naviguer après connexion
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (isRegister) {
-        const response = await registerUser({ email, password });
-        alert('Inscription réussie !');
-        navigate(`/dashboard/${response.user.role}`); // Redirection après inscription
-      } else {
-        const user = await loginUser({ email, password });
-        alert('Connexion réussie !');
-        navigate(`/dashboard/${user.role}`); // Redirection après connexion
-      }
-    } catch (error) {
-      console.error('Erreur lors de la soumission :', error.message);
-      alert(`Erreur : ${error.message}`);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    if (isRegister) {
+      const response = await registerUser({ email, password });
+      console.log("Réponse du register :", response);
+      alert('Inscription réussie !');
+      setIsRegister(false);
+    } else {
+      const response = await loginUser({ email, password });
+      console.log("Réponse du login :", response);
+      alert('Connexion réussie !');
+      navigate(/dashboard/${response.user.role}); // Redirection basée sur le rôle
     }
-  };
+  } catch (error) {
+    console.error('Erreur lors de la soumission :', error.message);
+    alert('Erreur : ' + error.message);
+  }
+};
+
 
   return (
     <div className="form-container">
@@ -55,12 +58,12 @@ const LoginRegister = () => {
           onClick={() => setIsRegister(!isRegister)}
         >
           {isRegister
-            ? 'Déjà un compte ? Connectez-vous'
-            : "Pas de compte ? Inscrivez-vous"}
+            ? 'Déjà un compte ? Connectez-vous'
+            : "Pas de compte ? Inscrivez-vous"}
         </button>
       </form>
     </div>
   );
 };
 
-export default LoginRegister;
+export default LoginRegister;  
