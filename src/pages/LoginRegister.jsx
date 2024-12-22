@@ -9,21 +9,26 @@ const LoginRegister = () => {
   const { loginUser } = useContext(AuthContext); // Fonction de connexion
   const navigate = useNavigate(); // Hook pour naviguer après connexion
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const user = await loginUser({ email, password });
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    if (isRegister) {
+      const response = await registerUser({ email, password });
+      console.log("Réponse du register :", response);
+      alert('Inscription réussie !');
+      setIsRegister(false);
+    } else {
+      const response = await loginUser({ email, password });
+      console.log("Réponse du login :", response);
       alert('Connexion réussie !');
-
-      // Redirection en fonction du rôle utilisateur
-      if (user.role === 'pelerin') navigate('/dashboard/pelerin');
-      else if (user.role === 'gestionnaire') navigate('/dashboard/gestionnaire');
-      else if (user.role === 'admin') navigate('/dashboard/admin');
-      else throw new Error('Rôle utilisateur inconnu.');
-    } catch (error) {
-      alert('Erreur : ' + error.message);
+      navigate(`/dashboard/${response.user.role}`); // Redirection basée sur le rôle
     }
-  };
+  } catch (error) {
+    console.error('Erreur lors de la soumission :', error.message);
+    alert('Erreur : ' + error.message);
+  }
+};
+
 
   return (
     <div className="form-container">
