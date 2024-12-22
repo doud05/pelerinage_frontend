@@ -11,11 +11,12 @@ const AuthProvider = ({ children }) => {
   const loginUser = async (credentials) => {
     try {
       const data = await login(credentials);
-      localStorage.setItem('token', data.token); // Stockage du token dans localStorage
-      setUser(data.user); // Mise à jour de l'utilisateur connecté
+      
       if (!data.user || !data.user.role) {
         throw new Error('Rôle utilisateur introuvable.');
       }
+      localStorage.setItem('token', data.token); // Stockage du token dans localStorage
+      setUser(data.user); // Mise à jour de l'utilisateur connecté
     } catch (error) {
       console.error('Erreur de connexion :', error.message);
       throw error; // Rejet en cas d'échec pour affichage de l'erreur
