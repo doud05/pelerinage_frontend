@@ -32,7 +32,10 @@ jobs:
           if [ -z "$VITE_API_URL" ]; then
             echo "Error: VITE_API_URL is not set." && exit 1
           fi
-          echo "Les variables d'environnement sont bien définies."
+          if [ -z "$JWT_SECRET" ]; then
+            echo "Error: JWT_SECRET is not set." && exit 1
+          fi
+          echo "Les variables d'environnement sont correctement définies."
 
       # 5. Installer les dépendances et effectuer les tests
       - name: Install dependencies and run tests
@@ -59,4 +62,5 @@ jobs:
         run: |
           curl -f https://${{ secrets.SERVER_HOST }}/api/auth/login || exit 1
           curl -f https://${{ secrets.SERVER_HOST }}/api/auth/register || exit 1
-          echo "Déploiement réussi et tests post-déploiement passés."
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
