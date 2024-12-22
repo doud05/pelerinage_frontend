@@ -8,6 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
+    "test": "echo \"Pas encore de tests configurés.\" && exit 0"
   },
   "dependencies": {
     "@vitejs/plugin-react-swc": "^3.7.2",
