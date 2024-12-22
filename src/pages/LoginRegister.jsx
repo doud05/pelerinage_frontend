@@ -6,7 +6,7 @@ const LoginRegister = () => {
   const [isRegister, setIsRegister] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { loginUser, registerUser } = useContext(AuthContext);
+  const { loginUser, registerUser } = useContext(AuthContext); // Accès aux fonctions du contexte
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -14,18 +14,18 @@ const LoginRegister = () => {
     try {
       if (isRegister) {
         const response = await registerUser({ email, password });
-        console.log('Réponse du register:', response);
+        console.log('Réponse du register:', response); // Log pour vérifier la réponse
         alert('Inscription réussie !');
         setIsRegister(false); // Passe en mode connexion après inscription
       } else {
         const response = await loginUser({ email, password });
-        console.log('Réponse du login:', response);
+        console.log('Réponse du login:', response); // Log pour vérifier la réponse
         alert('Connexion réussie !');
         navigate(`/dashboard/${response.user.role}`); // Redirection selon le rôle
       }
     } catch (error) {
       console.error('Erreur lors de la soumission :', error.message);
-      alert('Erreur : ' + error.message);
+      alert('Erreur : ' + error.message); // Affiche l'erreur dans une alerte
     }
   };
 
