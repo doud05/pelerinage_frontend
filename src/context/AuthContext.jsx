@@ -13,6 +13,10 @@ const AuthProvider = ({ children }) => {
       const data = await login(credentials);
       localStorage.setItem('token', data.token); // Stockage du token dans localStorage
       setUser(data.user); // Mise à jour de l'utilisateur connecté
+        // Vérifiez si `data.user` contient bien un rôle
+    if (!data.user || !data.user.role) {
+      throw new Error("Rôle utilisateur introuvable.");
+    }
     } catch (error) {
       console.error('Erreur de connexion :', error.message);
       throw error; // Rejet en cas d'échec pour affichage de l'erreur
