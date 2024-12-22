@@ -1,4 +1,4 @@
- import React, { useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
@@ -9,26 +9,25 @@ const LoginRegister = () => {
   const { loginUser } = useContext(AuthContext); // Fonction de connexion
   const navigate = useNavigate(); // Hook pour naviguer après connexion
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    if (isRegister) {
-      const response = await registerUser({ email, password });
-      console.log("Réponse du register :", response);
-      alert('Inscription réussie !');
-      setIsRegister(false);
-    } else {
-      const response = await loginUser({ email, password });
-      console.log("Réponse du login :", response);
-      alert('Connexion réussie !');
-      navigate(/dashboard/${response.user.role}); // Redirection basée sur le rôle
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (isRegister) {
+        const response = await registerUser({ email, password });
+        console.log("Réponse du register :", response);
+        alert('Inscription réussie !');
+        setIsRegister(false);
+      } else {
+        const response = await loginUser({ email, password });
+        console.log("Réponse du login :", response);
+        alert('Connexion réussie !');
+        navigate(`/dashboard/${response.user.role}`); // Redirection basée sur le rôle
+      }
+    } catch (error) {
+      console.error('Erreur lors de la soumission :', error.message);
+      alert('Erreur : ' + error.message);
     }
-  } catch (error) {
-    console.error('Erreur lors de la soumission :', error.message);
-    alert('Erreur : ' + error.message);
-  }
-};
-
+  };
 
   return (
     <div className="form-container">
@@ -66,4 +65,4 @@ const handleSubmit = async (e) => {
   );
 };
 
-export default LoginRegister;  
+export default LoginRegister;
