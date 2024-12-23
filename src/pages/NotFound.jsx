@@ -1,9 +1,5 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 
-/**
- * Page pour les routes non trouvées.
- */
 const NotFound = () => {
   return (
     <div style={{ textAlign: 'center', padding: '20px' }}>
