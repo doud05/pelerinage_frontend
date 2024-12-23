@@ -7,6 +7,6 @@ export default defineConfig({
     sourcemap: true, // Pour déboguer
   },
   define: {
-    'process.env': process.env, // Inclut toutes les variables d'environnement
+   'import.meta.env': import.meta.env, // Inclut toutes les variables d'environnement
   },
 });    
