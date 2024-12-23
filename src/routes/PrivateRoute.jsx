@@ -16,6 +16,7 @@ const PrivateRoute = ({ allowedRoles = [] }) => {
     return <Navigate to="/" replace />;
   }
 
+  console.log(`Accès autorisé pour l'utilisateur : ${user.email} avec le rôle ${user.role}`);
   return <Outlet />;
 };
 
