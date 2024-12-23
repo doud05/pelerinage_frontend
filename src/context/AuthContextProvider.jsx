@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect } from 'react';
 import { login, register, fetchUserProfile, logout } from '../services/api';
 import PropTypes from 'prop-types';
 
@@ -36,7 +36,7 @@ const AuthContextProvider = ({ children }) => {
           throw new Error('Profil utilisateur invalide ou rôle introuvable.');
         }
         setUser(profile.user);
-      } catch (error) {
+      } catch {
         logoutUser();
       }
     };
