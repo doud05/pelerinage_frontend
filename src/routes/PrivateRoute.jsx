@@ -11,6 +11,7 @@ const PrivateRoute = ({ allowedRoles = [] }) => {
     return <Navigate to="/login" replace />;
   }
 
+  console.log(`Vérification des rôles : utilisateur ${user.email}, rôle ${user.role}`);
   if (allowedRoles.length && !allowedRoles.includes(user.role)) {
     console.warn(`Accès refusé : rôle ${user.role} non autorisé. Redirection vers /.`);
     return <Navigate to="/" replace />;
