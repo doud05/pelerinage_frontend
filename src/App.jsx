@@ -7,6 +7,8 @@ import NotFound from './pages/NotFound';
 import PrivateRoute from './routes/PrivateRoute';
 
 const App = () => {
+  console.log('Routes chargées dans App.jsx.');
+
   return (
     <Router>
       <Routes>
