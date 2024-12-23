@@ -1,5 +1,3 @@
-import React from 'react';
-
 /**
  * Page du tableau de bord.
  */

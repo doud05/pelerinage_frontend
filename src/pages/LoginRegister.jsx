@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { AuthContext } from '../context/AuthContextProvider';
 
 const LoginRegister = () => {
   const [isRegister, setIsRegister] = useState(false);
@@ -9,25 +9,25 @@ const LoginRegister = () => {
   const [prenom, setPrenom] = useState('');
   const [nom, setNom] = useState('');
   const [dateNaissance, setDateNaissance] = useState('');
+  const { loginUser, registerUser } = useContext(AuthContext); // Utilisation du contexte
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const url = isRegister ? '/auth/register' : '/auth/login';
 
     try {
-      const payload = isRegister
-        ? { email, password, prenom, nom, date_naissance: dateNaissance }
-        : { email, password };
-
-      const { data } = await axios.post(`https://resa.pelerinagesdegap.fr/api${url}`, payload);
-
-      localStorage.setItem('token', data.token);
-      const role = data.user.role;
-      navigate(`/dashboard/${role}`);
+      if (isRegister) {
+        const payload = { email, password, prenom, nom, date_naissance: dateNaissance };
+        await registerUser(payload);
+        alert('Inscription réussie ! Vous pouvez maintenant vous connecter.');
+        setIsRegister(false); // Basculer vers la connexion après inscription
+      } else {
+        const data = await loginUser({ email, password });
+        navigate(`/dashboard/${data.user.role}`); // Redirection selon le rôle
+      }
     } catch (error) {
-      console.error('Erreur :', error.response?.data || error.message);
-      alert('Une erreur est survenue.');
+      console.error('Erreur :', error.message);
+      alert(`Une erreur est survenue : ${error.message}`);
     }
   };
 

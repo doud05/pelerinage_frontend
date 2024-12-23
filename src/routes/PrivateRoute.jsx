@@ -7,10 +7,12 @@ const PrivateRoute = ({ allowedRoles = [] }) => {
   const { user } = useContext(AuthContext);
 
   if (!user) {
+    console.warn('Utilisateur non connecté. Redirection vers /login.');
     return <Navigate to="/login" replace />;
   }
 
   if (allowedRoles.length && !allowedRoles.includes(user.role)) {
+    console.warn(`Accès refusé : rôle ${user.role} non autorisé. Redirection vers /.`);
     return <Navigate to="/" replace />;
   }
 
