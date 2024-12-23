@@ -9,7 +9,7 @@ const LoginRegister = () => {
   const [prenom, setPrenom] = useState('');
   const [nom, setNom] = useState('');
   const [dateNaissance, setDateNaissance] = useState('');
-  const { loginUser, registerUser } = useContext(AuthContext); // Utilisation du contexte
+  const { loginUser, registerUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -20,10 +20,10 @@ const LoginRegister = () => {
         const payload = { email, password, prenom, nom, date_naissance: dateNaissance };
         await registerUser(payload);
         alert('Inscription réussie ! Vous pouvez maintenant vous connecter.');
-        setIsRegister(false); // Basculer vers la connexion après inscription
+        setIsRegister(false);
       } else {
         const data = await loginUser({ email, password });
-        navigate(`/dashboard/${data.user.role}`); // Redirection selon le rôle
+        navigate(`/dashboard/${data.user.role}`);
       }
     } catch (error) {
       console.error('Erreur :', error.message);
@@ -45,8 +45,14 @@ const LoginRegister = () => {
             <input type="text" value={prenom} onChange={(e) => setPrenom(e.target.value)} required />
             <label>Nom :</label>
             <input type="text" value={nom} onChange={(e) => setNom(e.target.value)} required />
-            <label>Date de Naissance :</label>
-            <input type="date" value={dateNaissance} onChange={(e) => setDateNaissance(e.target.value)} required />
+            <label>Date de Naissance (JJ/MM/AAAA) :</label>
+            <input
+              type="text"
+              value={dateNaissance}
+              onChange={(e) => setDateNaissance(e.target.value)}
+              placeholder="JJ/MM/AAAA"
+              required
+            />
           </>
         )}
         <button type="submit">{isRegister ? "S'inscrire" : 'Se connecter'}</button>
