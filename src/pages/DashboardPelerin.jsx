@@ -1,5 +1,3 @@
-import React from 'react';
-
 const DashboardPelerin = () => {
   return (
     <div>
