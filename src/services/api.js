@@ -24,90 +24,51 @@ api.interceptors.request.use(
 
 /**
  * @description Connexion utilisateur
- * @param {Object} credentials - Les informations de connexion (email et mot de passe)
- * @returns {Object} Données utilisateur et token
  */
 export const login = async (credentials) => {
-  const { data } = await api.post('/auth/login', credentials);
-  return data;
+  try {
+    const { data } = await api.post('/auth/login', credentials);
+    console.log('Réponse API login :', data);
+    return data;
+  } catch (error) {
+    console.error('Erreur API login :', error.response?.data || error.message);
+    throw error;
+  }
 };
 
 /**
  * @description Inscription utilisateur
- * Attribue un rôle par défaut ('pelerin') si non spécifié.
- * @param {Object} userData - Les informations d'inscription (email, mot de passe)
- * @returns {Object} Données utilisateur et token
  */
 export const register = async (userData) => {
-  const { data } = await api.post('/auth/register', { ...userData, role: 'pelerin' });
-  return data;
+  try {
+    const { data } = await api.post('/auth/register', { ...userData, role: 'pelerin' });
+    console.log('Réponse API register :', data);
+    return data;
+  } catch (error) {
+    console.error('Erreur API register :', error.response?.data || error.message);
+    throw error;
+  }
 };
 
 /**
  * @description Récupère le profil utilisateur authentifié
- * @returns {Object} Données du profil utilisateur
  */
 export const fetchUserProfile = async () => {
-  const { data } = await api.get('/auth/profile');
-  return data;
+  try {
+    const { data } = await api.get('/auth/profile');
+    console.log('Profil utilisateur récupéré :', data);
+    return data;
+  } catch (error) {
+    console.error('Erreur API fetchUserProfile :', error.response?.data || error.message);
+    throw error;
+  }
 };
 
 /**
  * @description Déconnexion utilisateur
- * Supprime le token local
  */
 export const logout = () => {
   localStorage.removeItem('token');
-};
-
-/**
- * @description Récupère tous les utilisateurs (administrateur uniquement)
- * @returns {Array} Liste des utilisateurs
- */
-export const getAllUsers = async () => {
-  const { data } = await api.get('/users');
-  return data;
-};
-
-/**
- * @description Met à jour le rôle d'un utilisateur
- * (administrateur uniquement)
- * @param {number} userId - ID de l'utilisateur
- * @param {string} role - Nouveau rôle (e.g., 'admin', 'gestionnaire', 'pelerin')
- * @returns {Object} Utilisateur mis à jour
- */
-export const updateUserRole = async (userId, role) => {
-  const { data } = await api.put(`/users/${userId}/role`, { role });
-  return data;
-};
-
-/**
- * @description Récupère les données du tableau de bord spécifique à un rôle
- * @param {string} role - Le rôle de l'utilisateur ('admin', 'gestionnaire', 'pelerin')
- * @returns {Object} Données du tableau de bord
- */
-export const getDashboardData = async (role) => {
-  const { data } = await api.get(`/dashboard/${role}`);
-  return data;
-};
-
-/**
- * @description Récupère les réservations de l'utilisateur authentifié
- * @returns {Array} Liste des réservations
- */
-export const getUserReservations = async () => {
-  const { data } = await api.get('/reservations');
-  return data;
-};
-
-/**
- * @description Crée une réservation pour un pèlerin
- * @param {Object} reservationData - Données de la réservation
- * @returns {Object} Réservation créée
- */
-export const createReservation = async (reservationData) => {
-  const { data } = await api.post('/reservations', reservationData);
-  return data;
 };
 
 export default api;

@@ -25,7 +25,6 @@ jobs:
         run: |
           npm install
           npm run build
-
       # 4. Déployer sur le serveur distant
       - name: Deploy to Server
         run: |
@@ -35,7 +34,6 @@ jobs:
           scp -r dist/* ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/var/www/temp/
           ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
             mv /var/www/temp/* /var/www/html/"
-
       # 5. Confirmation de déploiement
       - name: Confirm successful deployment
         run: echo "Déploiement réussi sur le serveur !"

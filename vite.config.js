@@ -9,4 +9,4 @@ export default defineConfig({
   define: {
     'process.env': process.env, // Inclut toutes les variables d'environnement
   },
-});
+});    

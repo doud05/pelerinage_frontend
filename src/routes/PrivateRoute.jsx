@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
+import { AuthContext } from '../context/AuthContextProvider';
+import PropTypes from 'prop-types';
 
 const PrivateRoute = ({ allowedRoles = [] }) => {
   const { user } = useContext(AuthContext);
@@ -14,6 +15,10 @@ const PrivateRoute = ({ allowedRoles = [] }) => {
   }
 
   return <Outlet />;
+};
+
+PrivateRoute.propTypes = {
+  allowedRoles: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default PrivateRoute;
