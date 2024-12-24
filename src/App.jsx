@@ -1,11 +1,11 @@
-import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom'; // Assurez-vous d'importer `Outlet` ici
 import LoginRegister from './pages/LoginRegister';
 import DashboardPelerin from './pages/DashboardPelerin';
 import DashboardGestionnaire from './pages/DashboardGestionnaire';
 import DashboardAdmin from './pages/DashboardAdmin';
 import NotFound from './pages/NotFound';
 import PrivateRoute from './routes/PrivateRoute';
-import ErrorBoundary from './components/ErrorBoundary';
+import ErrorBoundary from './components/ErrorBoundary'; // Nouveau
 
 const App = () => {
   console.log('Routes chargées dans App.jsx.');
