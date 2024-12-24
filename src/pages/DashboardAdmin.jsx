@@ -6,7 +6,8 @@ const DashboardAdmin = () => {
   const [statistics, setStatistics] = useState(null);
   const [loadingUsers, setLoadingUsers] = useState(false);
   const [loadingStatistics, setLoadingStatistics] = useState(false);
-  const [error, setError] = useState(null);
+  const [errorUsers, setErrorUsers] = useState(null);
+  const [errorStatistics, setErrorStatistics] = useState(null);
 
   // Fetch des utilisateurs
   useEffect(() => {
@@ -16,7 +17,7 @@ const DashboardAdmin = () => {
         const { data } = await api.get('/utilisateurs');
         setUsers(data.data);
       } catch (err) {
-        setError('Erreur lors du chargement des utilisateurs.');
+        setErrorUsers('Erreur lors du chargement des utilisateurs.');
       } finally {
         setLoadingUsers(false);
       }
@@ -32,7 +33,7 @@ const DashboardAdmin = () => {
         const { data } = await api.get('/dashboard/admin/statistics');
         setStatistics(data.data);
       } catch (err) {
-        setError('Erreur lors du chargement des statistiques.');
+        setErrorStatistics('Erreur lors du chargement des statistiques.');
       } finally {
         setLoadingStatistics(false);
       }
@@ -61,6 +62,7 @@ const DashboardAdmin = () => {
       <section>
         <h2>Statistiques globales</h2>
         {loadingStatistics && <p>Chargement des statistiques...</p>}
+        {errorStatistics && <p>{errorStatistics}</p>}
         {statistics ? (
           <div>
             <p>Total des utilisateurs : {statistics.totalUsers}</p>
@@ -83,7 +85,7 @@ const DashboardAdmin = () => {
       <section>
         <h2>Gestion des utilisateurs</h2>
         {loadingUsers && <p>Chargement des utilisateurs...</p>}
-        {error && <p>{error}</p>}
+        {errorUsers && <p>{errorUsers}</p>}
         <table>
           <thead>
             <tr>
