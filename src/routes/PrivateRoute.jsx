@@ -6,14 +6,19 @@ import PropTypes from 'prop-types';
 const PrivateRoute = ({ allowedRoles = [], children }) => {
   const { user } = useContext(AuthContext);
 
-  console.log('Utilisateur récupéré dans PrivateRoute simplifié :', user);
+  console.log('Utilisateur récupéré dans PrivateRoute avec gestion des rôles :', user);
 
   if (!user) {
     console.warn('Utilisateur non connecté. Redirection vers /login.');
     return <Navigate to="/login" replace />;
   }
 
-  console.log(`Accès autorisé pour l'utilisateur : ${user.email}, rôle : ${user.role}`);
+  if (allowedRoles.length && !allowedRoles.includes(user.role)) {
+    console.warn(`Accès refusé : rôle ${user.role} non autorisé.`);
+    return <Navigate to="/" replace />;
+  }
+
+  console.log(`Accès autorisé pour l'utilisateur : ${user.email} avec le rôle ${user.role}`);
   return children;
 };
 
