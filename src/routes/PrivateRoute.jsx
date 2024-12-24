@@ -7,19 +7,19 @@ const PrivateRoute = ({ allowedRoles = [] }) => {
   const { user } = useContext(AuthContext);
   const location = useLocation();
 
-  console.log('Utilisateur récupéré dans PrivateRoute avec Outlet :', user);
-  console.log('Route actuelle :', location.pathname);
-
-  // Vérifier si l'utilisateur est connecté
   if (!user) {
     console.warn('Utilisateur non connecté. Redirection vers /login.');
     return <Navigate to="/login" replace />;
   }
 
-  // Vérifier si l'utilisateur a un rôle autorisé
   if (allowedRoles.length && !allowedRoles.includes(user.role)) {
     console.warn(`Accès refusé : rôle ${user.role} non autorisé.`);
-    return <Navigate to="/" replace />;
+    return (
+      <div style={{ textAlign: 'center', padding: '20px' }}>
+        <h1>403 - Accès refusé</h1>
+        <p>Vous n&apos;avez pas l&apos;autorisation d&apos;accéder à cette page.</p>
+      </div>
+    );
   }
 
   console.log(`Accès autorisé pour l'utilisateur : ${user.email} avec le rôle ${user.role}`);
