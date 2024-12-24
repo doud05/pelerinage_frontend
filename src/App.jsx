@@ -1,11 +1,11 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 import LoginRegister from './pages/LoginRegister';
 import DashboardPelerin from './pages/DashboardPelerin';
 import DashboardGestionnaire from './pages/DashboardGestionnaire';
 import DashboardAdmin from './pages/DashboardAdmin';
 import NotFound from './pages/NotFound';
 import PrivateRoute from './routes/PrivateRoute';
-import ErrorBoundary from './components/ErrorBoundary'; // Nouveau
+import ErrorBoundary from './components/ErrorBoundary';
 
 const App = () => {
   console.log('Routes chargées dans App.jsx.');
@@ -16,20 +16,18 @@ const App = () => {
         <Routes>
           <Route path="/" element={<LoginRegister />} />
           <Route path="/login" element={<LoginRegister />} />
-         <Route
-  path="/dashboard"
-  element={
-    <PrivateRoute allowedRoles={['admin', 'gestionnaire', 'pelerin']}>
-      <Outlet />
-    </PrivateRoute>
-  }
->
-  <Route path="admin" element={<DashboardAdmin />} />
-  <Route path="gestionnaire" element={<DashboardGestionnaire />} />
-  <Route path="pelerin" element={<DashboardPelerin />} />
-</Route>
-
-
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute allowedRoles={['admin', 'gestionnaire', 'pelerin']}>
+                <Outlet />
+              </PrivateRoute>
+            }
+          >
+            <Route path="admin" element={<DashboardAdmin />} />
+            <Route path="gestionnaire" element={<DashboardGestionnaire />} />
+            <Route path="pelerin" element={<DashboardPelerin />} />
+          </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
