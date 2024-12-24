@@ -42,4 +42,36 @@ api.interceptors.response.use(
   }
 );
 
+// Ajout explicite des exports manquants
+export const login = async (credentials) => {
+  try {
+    const { data } = await api.post('/auth/login', credentials);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const register = async (userData) => {
+  try {
+    const { data } = await api.post('/auth/register', { ...userData, role: 'pelerin' });
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const fetchUserProfile = async () => {
+  try {
+    const { data } = await api.get('/auth/profile');
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const logout = () => {
+  localStorage.removeItem('token');
+};
+
 export default api;
