@@ -69,7 +69,7 @@ export const fetchUserProfile = async () => {
  */
 export const fetchUsers = async () => {
   try {
-    const { data } = await api.get('/utilisateurs');
+    const { data } = await api.get('/utilisateurs'); // Correct URL
     console.log('Liste des utilisateurs récupérée :', data);
     return data;
   } catch (error) {
