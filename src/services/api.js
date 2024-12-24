@@ -15,59 +15,31 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    console.log('Intercepteur : Token ajouté', token);
     return config;
   },
   (error) => Promise.reject(error)
 );
 
-export const login = async (credentials) => {
-  try {
-    const { data } = await api.post('/auth/login', credentials);
-    return data;
-  } catch (error) {
-    throw error;
-  }
-};
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    if (error.response.status === 401 && error.response.data.message === 'Token expiré.') {
+      try {
+        const refreshResponse = await api.post('/auth/refresh');
+        const newToken = refreshResponse.data.token;
 
-export const register = async (userData) => {
-  try {
-    const { data } = await api.post('/auth/register', { ...userData, role: 'pelerin' });
-    return data;
-  } catch (error) {
-    throw error;
-  }
-};
+        localStorage.setItem('token', newToken);
 
-export const fetchUserProfile = async () => {
-  try {
-    const { data } = await api.get('/auth/profile');
-    return data;
-  } catch (error) {
-    throw error;
+        error.config.headers.Authorization = `Bearer ${newToken}`;
+        return api.request(error.config); // Relancer la requête originale
+      } catch (refreshError) {
+        console.error('Erreur lors du rafraîchissement du token :', refreshError.message);
+        localStorage.removeItem('token'); // Supprimer le token expiré
+        window.location.href = '/login'; // Rediriger vers la connexion
+      }
+    }
+    return Promise.reject(error);
   }
-};
-
-export const fetchUsers = async () => {
-  try {
-    const { data } = await api.get('/utilisateurs');
-    return data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const updateUserRole = async (userId, role) => {
-  try {
-    const { data } = await api.put(`/utilisateurs/${userId}/role`, { role });
-    return data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const logout = () => {
-  localStorage.removeItem('token');
-};
+);
 
 export default api;
