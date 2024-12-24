@@ -1,36 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 
 const DashboardAdmin = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Charger les utilisateurs
   useEffect(() => {
     const fetchUsers = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${process.env.VITE_API_URL}/utilisateurs`);
-        setUsers(response.data.data); // Assurez-vous que la clé correspond à votre API
-        setLoading(false);
+        const { data } = await api.get('/utilisateurs');
+        setUsers(data.data);
       } catch (err) {
         setError('Erreur lors du chargement des utilisateurs.');
+      } finally {
         setLoading(false);
       }
     };
-
     fetchUsers();
   }, []);
 
-  // Fonction pour mettre à jour le rôle
   const updateRole = async (userId, newRole) => {
     try {
-      await axios.put(`${process.env.VITE_API_URL}/utilisateurs/${userId}`, { role: newRole });
-      setUsers((prevUsers) =>
-        prevUsers.map((user) =>
-          user.id === userId ? { ...user, role: newRole } : user
-        )
+      await api.put(`/utilisateurs/${userId}/role`, { role: newRole });
+      setUsers((prev) =>
+        prev.map((user) => (user.id === userId ? { ...user, role: newRole } : user))
       );
       alert('Rôle mis à jour avec succès.');
     } catch (err) {
@@ -68,9 +63,7 @@ const DashboardAdmin = () => {
                 </select>
               </td>
               <td>
-                <button onClick={() => updateRole(user.id, user.role)}>
-                  Mettre à jour
-                </button>
+                <button onClick={() => updateRole(user.id, user.role)}>Mettre à jour</button>
               </td>
             </tr>
           ))}
