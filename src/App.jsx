@@ -16,7 +16,15 @@ const App = () => {
         <Routes>
           <Route path="/" element={<LoginRegister />} />
           <Route path="/login" element={<LoginRegister />} />
-          <Route path="/test-dashboard-admin" element={<DashboardAdmin />} />
+          <Route
+            path="/test-private-admin"
+            element={
+            <PrivateRoute allowedRoles={['admin']}>
+            <DashboardAdmin />
+            </PrivateRoute>
+            }
+            />
+
           <Route path="/test-dashboard-pelerin" element={<DashboardPelerin />} />
           <Route path="/test-dashboard-gestionnaire" element={<DashboardGestionnaire />} />
           <Route path="*" element={<NotFound />} />
