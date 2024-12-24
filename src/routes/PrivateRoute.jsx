@@ -1,12 +1,12 @@
 import { useContext } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContextProvider';
 import PropTypes from 'prop-types';
 
-const PrivateRoute = ({ allowedRoles = [], children }) => {
+const PrivateRoute = ({ allowedRoles = [] }) => {
   const { user } = useContext(AuthContext);
 
-  console.log('Utilisateur récupéré dans PrivateRoute avec gestion des rôles :', user);
+  console.log('Utilisateur récupéré dans PrivateRoute avec Outlet :', user);
 
   if (!user) {
     console.warn('Utilisateur non connecté. Redirection vers /login.');
@@ -19,12 +19,11 @@ const PrivateRoute = ({ allowedRoles = [], children }) => {
   }
 
   console.log(`Accès autorisé pour l'utilisateur : ${user.email} avec le rôle ${user.role}`);
-  return children;
+  return <Outlet />;
 };
 
 PrivateRoute.propTypes = {
   allowedRoles: PropTypes.arrayOf(PropTypes.string),
-  children: PropTypes.node.isRequired,
 };
 
 export default PrivateRoute;
