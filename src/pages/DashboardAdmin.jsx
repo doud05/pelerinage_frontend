@@ -11,8 +11,8 @@ const DashboardAdmin = () => {
     const fetchUsers = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${process.env.VITE_API_URL}/users`);
-        setUsers(response.data.users);
+        const response = await axios.get(`${process.env.VITE_API_URL}/utilisateurs`);
+        setUsers(response.data.data); // Assurez-vous que la clé correspond à votre API
         setLoading(false);
       } catch (err) {
         setError('Erreur lors du chargement des utilisateurs.');
@@ -26,7 +26,7 @@ const DashboardAdmin = () => {
   // Fonction pour mettre à jour le rôle
   const updateRole = async (userId, newRole) => {
     try {
-      await axios.put(`${process.env.VITE_API_URL}/users/${userId}/role`, { role: newRole });
+      await axios.put(`${process.env.VITE_API_URL}/utilisateurs/${userId}`, { role: newRole });
       setUsers((prevUsers) =>
         prevUsers.map((user) =>
           user.id === userId ? { ...user, role: newRole } : user
