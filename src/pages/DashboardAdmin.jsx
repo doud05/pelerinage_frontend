@@ -64,18 +64,22 @@ const DashboardAdmin = () => {
         {loadingStatistics && <p>Chargement des statistiques...</p>}
         {errorStatistics && <p>{errorStatistics}</p>}
         {statistics ? (
-          <div>
-            <p>Total des utilisateurs : {statistics.totalUsers}</p>
-            <p>Total des paiements : {statistics.paymentsTotal}€</p>
-            <h3>Réservations par statut :</h3>
-            <ul>
-              {statistics.reservationsByStatus.map((statut) => (
-                <li key={statut.statut}>
-                  {statut.statut} : {statut.count}
-                </li>
-              ))}
-            </ul>
-          </div>
+          statistics.totalUsers === 0 && statistics.paymentsTotal === 0 ? (
+            <p>Aucune donnée disponible pour les statistiques.</p>
+          ) : (
+            <div>
+              <p>Total des utilisateurs : {statistics.totalUsers}</p>
+              <p>Total des paiements : {statistics.paymentsTotal}€</p>
+              <h3>Réservations par statut :</h3>
+              <ul>
+                {statistics.reservationsByStatus.map((statut) => (
+                  <li key={statut.statut}>
+                    {statut.statut} : {statut.count}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
         ) : (
           !loadingStatistics && <p>Impossible de charger les données des statistiques.</p>
         )}
