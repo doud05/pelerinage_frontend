@@ -51,6 +51,20 @@ export const register = async (userData) => {
 };
 
 /**
+ * @description Récupère le profil utilisateur authentifié
+ */
+export const fetchUserProfile = async () => {
+  try {
+    const { data } = await api.get('/auth/profile');
+    console.log('Profil utilisateur récupéré :', data);
+    return data;
+  } catch (error) {
+    console.error('Erreur API fetchUserProfile :', error.response?.data || error.message);
+    throw error;
+  }
+};
+
+/**
  * @description Récupère la liste des utilisateurs
  */
 export const fetchUsers = async () => {
