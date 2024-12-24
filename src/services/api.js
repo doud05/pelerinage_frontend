@@ -51,15 +51,29 @@ export const register = async (userData) => {
 };
 
 /**
- * @description Récupère le profil utilisateur authentifié
+ * @description Récupère la liste des utilisateurs
  */
-export const fetchUserProfile = async () => {
+export const fetchUsers = async () => {
   try {
-    const { data } = await api.get('/auth/profile');
-    console.log('Profil utilisateur récupéré :', data);
+    const { data } = await api.get('/utilisateurs');
+    console.log('Liste des utilisateurs récupérée :', data);
     return data;
   } catch (error) {
-    console.error('Erreur API fetchUserProfile :', error.response?.data || error.message);
+    console.error('Erreur API fetchUsers :', error.response?.data || error.message);
+    throw error;
+  }
+};
+
+/**
+ * @description Met à jour le rôle d'un utilisateur
+ */
+export const updateUserRole = async (userId, role) => {
+  try {
+    const { data } = await api.put(`/utilisateurs/${userId}`, { role });
+    console.log('Utilisateur mis à jour :', data);
+    return data;
+  } catch (error) {
+    console.error('Erreur API updateUserRole :', error.response?.data || error.message);
     throw error;
   }
 };
