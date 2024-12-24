@@ -6,18 +6,22 @@ import PropTypes from 'prop-types';
 const PrivateRoute = ({ allowedRoles = [] }) => {
   const { user } = useContext(AuthContext);
 
+  // Vérifier si l'utilisateur est authentifié
   if (!user) {
-    console.warn('Utilisateur non connecté. Redirection vers /login.');
+    console.warn('[PrivateRoute] Utilisateur non connecté. Redirection vers /login.');
     return <Navigate to="/login" replace />;
   }
 
-  console.log(`Vérification des rôles : utilisateur ${user.email}, rôle ${user.role}`);
+  // Logs pour vérifier le rôle de l'utilisateur
+  console.info(`[PrivateRoute] Vérification des rôles : utilisateur ${user.email}, rôle ${user.role}`);
+
+  // Vérifier si l'utilisateur a un rôle autorisé
   if (allowedRoles.length && !allowedRoles.includes(user.role)) {
-    console.warn(`Accès refusé : rôle ${user.role} non autorisé. Redirection vers /.`);
+    console.warn(`[PrivateRoute] Accès refusé : rôle ${user.role} non autorisé. Redirection vers /.`);
     return <Navigate to="/" replace />;
   }
 
-  console.log(`Accès autorisé pour l'utilisateur : ${user.email} avec le rôle ${user.role}`);
+  console.info(`[PrivateRoute] Accès autorisé pour l'utilisateur : ${user.email} avec le rôle ${user.role}`);
   return <Outlet />;
 };
 
