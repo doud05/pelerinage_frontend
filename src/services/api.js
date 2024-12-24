@@ -69,7 +69,7 @@ export const fetchUserProfile = async () => {
  */
 export const fetchUsers = async () => {
   try {
-    const { data } = await api.get('/utilisateurs'); // Correct URL
+    const { data } = await api.get('/utilisateurs'); // URL correcte
     console.log('Liste des utilisateurs récupérée :', data);
     return data;
   } catch (error) {
@@ -83,7 +83,7 @@ export const fetchUsers = async () => {
  */
 export const updateUserRole = async (userId, role) => {
   try {
-    const { data } = await api.put(`/utilisateurs/${userId}`, { role });
+    const { data } = await api.put(`/utilisateurs/${userId}/role`, { role });
     console.log('Utilisateur mis à jour :', data);
     return data;
   } catch (error) {
