@@ -70,7 +70,8 @@ const AnnuaireAdmin = () => {
   return (
     <div>
       <h1>Annuaire des Pèlerins</h1>
-      
+
+      {/* Actions Import/Export */}
       <div>
         <button onClick={handleExport}>Exporter</button>
         <label>
@@ -84,6 +85,7 @@ const AnnuaireAdmin = () => {
         </label>
       </div>
 
+      {/* Recherche */}
       <div>
         <input
           type="text"
@@ -94,33 +96,39 @@ const AnnuaireAdmin = () => {
         <button onClick={handleSearch}>Rechercher</button>
       </div>
 
+      {/* Affichage des pèlerins */}
       {loading && <p>Chargement...</p>}
       {error && <p>{error}</p>}
-      <table>
-        <thead>
-          <tr>
-            <th>Nom</th>
-            <th>Prénom</th>
-            <th>Email</th>
-            <th>Téléphone</th>
-            <th>Adresse</th>
-            <th>Statut de la commande</th>
-          </tr>
-        </thead>
-        <tbody>
-          {pelerins.map((pelerin) => (
-            <tr key={pelerin.id}>
-              <td>{pelerin.nom}</td>
-              <td>{pelerin.prenom}</td>
-              <td>{pelerin.mail}</td>
-              <td>{pelerin.telephone_portable}</td>
-              <td>{pelerin.ville}</td>
-              <td>{pelerin.commandes?.[0]?.statut || 'Aucune'}</td>
+      {pelerins.length > 0 ? (
+        <table>
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Prénom</th>
+              <th>Email</th>
+              <th>Téléphone</th>
+              <th>Adresse</th>
+              <th>Statut de la commande</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {pelerins.map((pelerin) => (
+              <tr key={pelerin.id}>
+                <td>{pelerin.nom}</td>
+                <td>{pelerin.prenom}</td>
+                <td>{pelerin.mail}</td>
+                <td>{pelerin.telephone_portable}</td>
+                <td>{pelerin.ville}</td>
+                <td>{pelerin.commandes?.[0]?.statut || 'Aucune'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <p>Aucun pèlerin trouvé.</p>
+      )}
 
+      {/* Pagination */}
       <div>
         <button onClick={() => setPage((prev) => Math.max(prev - 1, 1))}>Précédent</button>
         <button onClick={() => setPage((prev) => prev + 1)}>Suivant</button>
