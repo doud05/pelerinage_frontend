@@ -40,7 +40,8 @@ const AnnuaireAdmin = () => {
 
   const handleExport = async () => {
     try {
-      await exportPelerins(); // API pour déclencher le téléchargement
+      await exportPelerins();
+      alert('Exportation réussie.');
     } catch (err) {
       alert('Erreur lors de l\'exportation.');
     }
@@ -54,9 +55,9 @@ const AnnuaireAdmin = () => {
     formData.append('file', file);
 
     try {
-      await importPelerins(formData); // API pour importer le fichier
+      await importPelerins(formData);
       alert('Importation réussie.');
-      fetchPelerins(); // Recharger la liste
+      fetchPelerins();
     } catch (err) {
       alert('Erreur lors de l\'importation.');
     }
@@ -70,7 +71,6 @@ const AnnuaireAdmin = () => {
     <div>
       <h1>Annuaire des Pèlerins</h1>
       
-      {/* Actions Import/Export */}
       <div>
         <button onClick={handleExport}>Exporter</button>
         <label>
@@ -84,7 +84,6 @@ const AnnuaireAdmin = () => {
         </label>
       </div>
 
-      {/* Recherche */}
       <div>
         <input
           type="text"
@@ -95,7 +94,6 @@ const AnnuaireAdmin = () => {
         <button onClick={handleSearch}>Rechercher</button>
       </div>
 
-      {/* Table des Pèlerins */}
       {loading && <p>Chargement...</p>}
       {error && <p>{error}</p>}
       <table>
@@ -123,7 +121,6 @@ const AnnuaireAdmin = () => {
         </tbody>
       </table>
 
-      {/* Pagination */}
       <div>
         <button onClick={() => setPage((prev) => Math.max(prev - 1, 1))}>Précédent</button>
         <button onClick={() => setPage((prev) => prev + 1)}>Suivant</button>
@@ -138,4 +135,3 @@ const AnnuaireAdmin = () => {
 };
 
 export default AnnuaireAdmin;
-
