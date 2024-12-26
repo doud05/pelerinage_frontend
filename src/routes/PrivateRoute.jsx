@@ -6,6 +6,9 @@ import PropTypes from 'prop-types';
 const PrivateRoute = ({ allowedRoles = [] }) => {
   const { user } = useContext(AuthContext);
 
+  console.log('PrivateRoute chargé.');
+  console.log('Utilisateur actuel :', user);
+
   // Vérifier si l'utilisateur est connecté
   if (!user) {
     console.warn('Utilisateur non connecté. Redirection vers /login.');
