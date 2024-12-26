@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Pour la navigation
+import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
-    
+
 const DashboardAdmin = () => {
   const [users, setUsers] = useState([]);
   const [statistics, setStatistics] = useState(null);
@@ -10,7 +10,7 @@ const DashboardAdmin = () => {
   const [errorUsers, setErrorUsers] = useState(null);
   const [errorStatistics, setErrorStatistics] = useState(null);
 
-  const navigate = useNavigate(); // Hook pour rediriger vers l'annuaire
+  const navigate = useNavigate();
 
   // Fetch des utilisateurs
   useEffect(() => {
@@ -19,7 +19,9 @@ const DashboardAdmin = () => {
       try {
         const { data } = await api.get('/utilisateurs');
         setUsers(data.data);
+        console.log('Utilisateurs récupérés:', data.data);
       } catch (err) {
+        console.error('Erreur lors du chargement des utilisateurs:', err);
         setErrorUsers('Erreur lors du chargement des utilisateurs.');
       } finally {
         setLoadingUsers(false);
@@ -35,7 +37,9 @@ const DashboardAdmin = () => {
       try {
         const { data } = await api.get('/dashboard/admin/statistics');
         setStatistics(data.data);
+        console.log('Statistiques récupérées:', data.data);
       } catch (err) {
+        console.error('Erreur lors du chargement des statistiques:', err);
         setErrorStatistics('Erreur lors du chargement des statistiques.');
       } finally {
         setLoadingStatistics(false);
@@ -53,6 +57,7 @@ const DashboardAdmin = () => {
       );
       alert('Rôle mis à jour avec succès.');
     } catch (err) {
+      console.error('Erreur lors de la mise à jour du rôle:', err);
       alert('Erreur lors de la mise à jour du rôle.');
     }
   };
@@ -74,22 +79,18 @@ const DashboardAdmin = () => {
         {loadingStatistics && <p>Chargement des statistiques...</p>}
         {errorStatistics && <p>{errorStatistics}</p>}
         {statistics ? (
-          statistics.totalUsers === 0 && statistics.paymentsTotal === 0 ? (
-            <p>Aucune donnée disponible pour les statistiques.</p>
-          ) : (
-            <div>
-              <p>Total des utilisateurs : {statistics.totalUsers}</p>
-              <p>Total des paiements : {statistics.paymentsTotal}€</p>
-              <h3>Réservations par statut :</h3>
-              <ul>
-                {statistics.reservationsByStatus.map((statut) => (
-                  <li key={statut.statut}>
-                    {statut.statut} : {statut.count}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )
+          <div>
+            <p>Total des utilisateurs : {statistics.totalUsers}</p>
+            <p>Total des paiements : {statistics.paymentsTotal}€</p>
+            <h3>Réservations par statut :</h3>
+            <ul>
+              {statistics.reservationsByStatus.map((statut) => (
+                <li key={statut.statut}>
+                  {statut.statut} : {statut.count}
+                </li>
+              ))}
+            </ul>
+          </div>
         ) : (
           !loadingStatistics && <p>Impossible de charger les données des statistiques.</p>
         )}
