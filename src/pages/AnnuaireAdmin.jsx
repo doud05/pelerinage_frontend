@@ -9,18 +9,23 @@ const AnnuaireAdmin = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
 
+  // Fetch initial des pèlerins
   const fetchPelerins = async () => {
     setLoading(true);
     try {
+      console.log(`Fetching pelerins: page=${page}, limit=${limit}`);
       const { data } = await getPelerins(page, limit);
       setPelerins(data.data);
+      console.log('Pèlerins récupérés:', data.data);
     } catch (err) {
+      console.error('Erreur lors du chargement des pèlerins:', err);
       setError('Erreur lors du chargement des pèlerins.');
     } finally {
       setLoading(false);
     }
   };
 
+  // Recherche de pèlerins
   const handleSearch = async () => {
     if (!searchQuery) {
       fetchPelerins();
@@ -29,24 +34,31 @@ const AnnuaireAdmin = () => {
 
     setLoading(true);
     try {
+      console.log(`Recherche de pelerins avec query="${searchQuery}"`);
       const { data } = await searchPelerins(searchQuery);
       setPelerins(data.data);
+      console.log('Résultats de recherche:', data.data);
     } catch (err) {
+      console.error('Erreur lors de la recherche:', err);
       setError('Erreur lors de la recherche.');
     } finally {
       setLoading(false);
     }
   };
 
+  // Exportation des pèlerins
   const handleExport = async () => {
     try {
+      console.log('Exportation des pèlerins...');
       await exportPelerins();
       alert('Exportation réussie.');
     } catch (err) {
+      console.error('Erreur lors de l\'exportation:', err);
       alert('Erreur lors de l\'exportation.');
     }
   };
 
+  // Importation de fichiers Excel
   const handleImport = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -55,14 +67,17 @@ const AnnuaireAdmin = () => {
     formData.append('file', file);
 
     try {
+      console.log('Importation de fichier Excel...');
       await importPelerins(formData);
       alert('Importation réussie.');
-      fetchPelerins();
+      fetchPelerins(); // Recharger les données après importation
     } catch (err) {
+      console.error('Erreur lors de l\'importation:', err);
       alert('Erreur lors de l\'importation.');
     }
   };
 
+  // Charger les pèlerins à chaque changement de page ou de limite
   useEffect(() => {
     fetchPelerins();
   }, [page, limit]);
@@ -125,7 +140,7 @@ const AnnuaireAdmin = () => {
           </tbody>
         </table>
       ) : (
-        <p>Aucun pèlerin trouvé.</p>
+        !loading && <p>Aucun pèlerin trouvé.</p>
       )}
 
       {/* Pagination */}
