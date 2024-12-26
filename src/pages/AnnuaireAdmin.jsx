@@ -9,17 +9,22 @@ const AnnuaireAdmin = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
 
-  // Fetch initial des pèlerins
+  // Récupérer les pèlerins
   const fetchPelerins = async () => {
     setLoading(true);
+    setError(null); // Réinitialiser les erreurs au début de chaque appel
     try {
       console.log(`Fetching pelerins: page=${page}, limit=${limit}`);
       const { data } = await getPelerins(page, limit);
-      setPelerins(data.data);
-      console.log('Pèlerins récupérés:', data.data);
+      if (data && data.data) {
+        setPelerins(data.data);
+        console.log('Pèlerins récupérés :', data.data);
+      } else {
+        throw new Error('Données reçues invalides.');
+      }
     } catch (err) {
-      console.error('Erreur lors du chargement des pèlerins:', err);
-      setError('Erreur lors du chargement des pèlerins.');
+      console.error('Erreur lors du chargement des pèlerins :', err);
+      setError('Impossible de charger les pèlerins. Veuillez réessayer plus tard.');
     } finally {
       setLoading(false);
     }
@@ -33,14 +38,19 @@ const AnnuaireAdmin = () => {
     }
 
     setLoading(true);
+    setError(null);
     try {
       console.log(`Recherche de pelerins avec query="${searchQuery}"`);
       const { data } = await searchPelerins(searchQuery);
-      setPelerins(data.data);
-      console.log('Résultats de recherche:', data.data);
+      if (data && data.data) {
+        setPelerins(data.data);
+        console.log('Résultats de recherche :', data.data);
+      } else {
+        throw new Error('Données reçues invalides.');
+      }
     } catch (err) {
-      console.error('Erreur lors de la recherche:', err);
-      setError('Erreur lors de la recherche.');
+      console.error('Erreur lors de la recherche :', err);
+      setError('Erreur lors de la recherche. Veuillez réessayer.');
     } finally {
       setLoading(false);
     }
@@ -53,15 +63,18 @@ const AnnuaireAdmin = () => {
       await exportPelerins();
       alert('Exportation réussie.');
     } catch (err) {
-      console.error('Erreur lors de l\'exportation:', err);
-      alert('Erreur lors de l\'exportation.');
+      console.error('Erreur lors de l\'exportation :', err);
+      alert('Erreur lors de l\'exportation. Veuillez réessayer.');
     }
   };
 
   // Importation de fichiers Excel
   const handleImport = async (event) => {
     const file = event.target.files[0];
-    if (!file) return;
+    if (!file) {
+      alert('Veuillez sélectionner un fichier à importer.');
+      return;
+    }
 
     const formData = new FormData();
     formData.append('file', file);
@@ -72,14 +85,18 @@ const AnnuaireAdmin = () => {
       alert('Importation réussie.');
       fetchPelerins(); // Recharger les données après importation
     } catch (err) {
-      console.error('Erreur lors de l\'importation:', err);
-      alert('Erreur lors de l\'importation.');
+      console.error('Erreur lors de l\'importation :', err);
+      alert('Erreur lors de l\'importation. Veuillez vérifier votre fichier.');
     }
   };
 
   // Charger les pèlerins à chaque changement de page ou de limite
   useEffect(() => {
-    fetchPelerins();
+    try {
+      fetchPelerins();
+    } catch (err) {
+      console.error('Erreur dans useEffect :', err);
+    }
   }, [page, limit]);
 
   return (
@@ -87,10 +104,10 @@ const AnnuaireAdmin = () => {
       <h1>Annuaire des Pèlerins</h1>
 
       {/* Actions Import/Export */}
-      <div>
+      <div style={{ marginBottom: '20px' }}>
         <button onClick={handleExport}>Exporter</button>
         <label>
-          Importer
+          <span style={{ cursor: 'pointer', textDecoration: 'underline' }}>Importer</span>
           <input
             type="file"
             accept=".xlsx"
@@ -101,19 +118,20 @@ const AnnuaireAdmin = () => {
       </div>
 
       {/* Recherche */}
-      <div>
+      <div style={{ marginBottom: '20px' }}>
         <input
           type="text"
           placeholder="Rechercher..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+          style={{ padding: '5px', marginRight: '10px' }}
         />
         <button onClick={handleSearch}>Rechercher</button>
       </div>
 
       {/* Affichage des pèlerins */}
       {loading && <p>Chargement...</p>}
-      {error && <p>{error}</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       {pelerins.length > 0 ? (
         <table>
           <thead>
@@ -144,10 +162,26 @@ const AnnuaireAdmin = () => {
       )}
 
       {/* Pagination */}
-      <div>
-        <button onClick={() => setPage((prev) => Math.max(prev - 1, 1))}>Précédent</button>
-        <button onClick={() => setPage((prev) => prev + 1)}>Suivant</button>
-        <select value={limit} onChange={(e) => setLimit(Number(e.target.value))}>
+      <div style={{ marginTop: '20px' }}>
+        <button
+          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          disabled={loading}
+          style={{ marginRight: '10px' }}
+        >
+          Précédent
+        </button>
+        <button
+          onClick={() => setPage((prev) => prev + 1)}
+          disabled={loading}
+          style={{ marginRight: '10px' }}
+        >
+          Suivant
+        </button>
+        <select
+          value={limit}
+          onChange={(e) => setLimit(Number(e.target.value))}
+          style={{ padding: '5px' }}
+        >
           <option value="10">10</option>
           <option value="25">25</option>
           <option value="50">50</option>
