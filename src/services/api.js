@@ -82,4 +82,10 @@ export const importPelerins = (formData) => api.post('/pelerins/import', formDat
   headers: { 'Content-Type': 'multipart/form-data' },
 });
 
+export const getPelerins = (page, limit) => {
+  console.log(`Appel API: GET /pelerins?page=${page}&limit=${limit}`);
+  return api.get(`/pelerins?page=${page}&limit=${limit}`);
+};
+
+
 export default api;
