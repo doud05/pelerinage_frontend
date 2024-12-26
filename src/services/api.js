@@ -42,36 +42,12 @@ api.interceptors.response.use(
   }
 );
 
-// Ajout explicite des exports manquants
-export const login = async (credentials) => {
-  try {
-    const { data } = await api.post('/auth/login', credentials);
-    return data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const register = async (userData) => {
-  try {
-    const { data } = await api.post('/auth/register', { ...userData, role: 'pelerin' });
-    return data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const fetchUserProfile = async () => {
-  try {
-    const { data } = await api.get('/auth/profile');
-    return data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const logout = () => {
-  localStorage.removeItem('token');
-};
+// Ajout des appels spécifiques pour la gestion des pèlerins
+export const getPelerins = (page, limit) => api.get(`/pelerins?page=${page}&limit=${limit}`);
+export const searchPelerins = (query) => api.get(`/pelerins/search?query=${query}`);
+export const exportPelerins = () => api.get('/pelerins/export', { responseType: 'blob' });
+export const importPelerins = (formData) => api.post('/pelerins/import', formData, {
+  headers: { 'Content-Type': 'multipart/form-data' },
+});
 
 export default api;
