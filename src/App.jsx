@@ -29,14 +29,15 @@ const App = () => {
             <Route path="gestionnaire" element={<DashboardGestionnaire />} />
             <Route path="pelerin" element={<DashboardPelerin />} />
           </Route>
-          <Route
-            path="/annuaire"
-            element={
-              <PrivateRoute allowedRoles={['admin', 'gestionnaire']}>
-                <AnnuaireAdmin />
-              </PrivateRoute>
-            }
-          />
+         <Route
+  path="/annuaire"
+  element={
+    <PrivateRoute allowedRoles={['admin', 'gestionnaire']}>
+      <AnnuaireAdmin />
+    </PrivateRoute>
+  }
+/>
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
