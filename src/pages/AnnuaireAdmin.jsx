@@ -1,21 +1,12 @@
-import React, { useEffect } from 'react';
-import { getPelerins } from '../services/api';
+import React from 'react';
 
 const TestPage = () => {
-  useEffect(() => {
-    const testApi = async () => {
-      try {
-        const { data } = await getPelerins(1, 10);
-        console.log('Données récupérées :', data);
-      } catch (error) {
-        console.error('Erreur API :', error);
-      }
-    };
-
-    testApi();
-  }, []);
-
-  return <div>Test Page</div>;
+  return (
+    <div>
+      <h1>Page de Test</h1>
+      <p>Si vous voyez ce texte, le rendu fonctionne.</p>
+    </div>
+  );
 };
 
 export default TestPage;
