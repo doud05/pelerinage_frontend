@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Pour la navigation
 import api from '../services/api';
 
 const DashboardAdmin = () => {
@@ -8,6 +9,8 @@ const DashboardAdmin = () => {
   const [loadingStatistics, setLoadingStatistics] = useState(false);
   const [errorUsers, setErrorUsers] = useState(null);
   const [errorStatistics, setErrorStatistics] = useState(null);
+
+  const navigate = useNavigate(); // Hook pour rediriger vers l'annuaire
 
   // Fetch des utilisateurs
   useEffect(() => {
@@ -57,6 +60,13 @@ const DashboardAdmin = () => {
   return (
     <div>
       <h1>Tableau de bord Administrateur</h1>
+
+      {/* Bouton pour accéder à l'annuaire */}
+      <div style={{ marginBottom: '20px' }}>
+        <button onClick={() => navigate('/annuaire')} style={{ padding: '10px 20px', fontSize: '16px' }}>
+          Accéder à l'annuaire
+        </button>
+      </div>
 
       {/* Section des statistiques */}
       <section>
