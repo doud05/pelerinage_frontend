@@ -42,7 +42,7 @@ api.interceptors.response.use(
   }
 );
 
-// Ajout explicite des exports manquants
+// Ajout explicite des exports
 export const login = async (credentials) => {
   try {
     const { data } = await api.post('/auth/login', credentials);
@@ -74,18 +74,16 @@ export const logout = () => {
   localStorage.removeItem('token');
 };
 
-// Ajout des appels spécifiques pour la gestion des pèlerins
-export const getPelerins = (page, limit) => api.get(`/pelerins?page=${page}&limit=${limit}`);
-export const searchPelerins = (query) => api.get(`/pelerins/search?query=${query}`);
-export const exportPelerins = () => api.get('/pelerins/export', { responseType: 'blob' });
-export const importPelerins = (formData) => api.post('/pelerins/import', formData, {
-  headers: { 'Content-Type': 'multipart/form-data' },
-});
-
+// Appels spécifiques pour la gestion des pèlerins
 export const getPelerins = (page, limit) => {
   console.log(`Appel API: GET /pelerins?page=${page}&limit=${limit}`);
   return api.get(`/pelerins?page=${page}&limit=${limit}`);
 };
 
+export const searchPelerins = (query) => api.get(`/pelerins/search?query=${query}`);
+export const exportPelerins = () => api.get('/pelerins/export', { responseType: 'blob' });
+export const importPelerins = (formData) => api.post('/pelerins/import', formData, {
+  headers: { 'Content-Type': 'multipart/form-data' },
+});
 
 export default api;
