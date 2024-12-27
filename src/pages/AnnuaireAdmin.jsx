@@ -7,7 +7,6 @@ const AnnuaireAdmin = () => {
   const [error, setError] = useState(null);
 
   console.log('Composant AnnuaireAdmin chargé.');
-  console.log('Montage du composant AnnuaireAdmin.');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,10 +34,6 @@ const AnnuaireAdmin = () => {
 
     fetchData();
   }, []);
-
-  if (error) {
-    console.error('Erreur affichée à l\'utilisateur :', error);
-  }
 
   return (
     <div style={{ backgroundColor: 'lightblue', padding: '20px' }}>
