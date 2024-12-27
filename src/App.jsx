@@ -5,7 +5,6 @@ import DashboardGestionnaire from './pages/DashboardGestionnaire';
 import DashboardAdmin from './pages/DashboardAdmin';
 import AnnuaireAdmin from './pages/AnnuaireAdmin';
 import NotFound from './pages/NotFound';
-import PrivateRoute from './routes/PrivateRoute';
 import ErrorBoundary from './components/ErrorBoundary';
 
 const App = () => {
@@ -20,9 +19,7 @@ const App = () => {
           <Route
             path="/dashboard"
             element={
-              <PrivateRoute allowedRoles={['admin', 'gestionnaire', 'pelerin']}>
-                <Outlet />
-              </PrivateRoute>
+              <Outlet />
             }
           >
             <Route path="admin" element={<DashboardAdmin />} />
@@ -31,11 +28,7 @@ const App = () => {
           </Route>
           <Route
             path="/annuaire"
-            element={
-              <PrivateRoute allowedRoles={['admin', 'gestionnaire']}>
-                <AnnuaireAdmin />
-              </PrivateRoute>
-            }
+            element={<AnnuaireAdmin />}
           />
           <Route path="*" element={<NotFound />} />
         </Routes>
