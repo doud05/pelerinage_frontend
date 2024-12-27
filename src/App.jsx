@@ -17,30 +17,26 @@ const App = () => {
         <Routes>
           <Route path="/" element={<LoginRegister />} />
           <Route path="/login" element={<LoginRegister />} />
-         <Route
-  path="/dashboard"
-  element={
-    <PrivateRoute allowedRoles={['admin', 'gestionnaire', 'pelerin']}>
-      <Outlet />
-    </PrivateRoute>
-  }
->
-  <Route path="admin" element={<DashboardAdmin />} />
-  <Route path="gestionnaire" element={<DashboardGestionnaire />} />
-  <Route path="pelerin" element={<DashboardPelerin />} />
-</Route>
-
-<Route
-  path="/annuaire"
-  element={
-    <PrivateRoute allowedRoles={['admin', 'gestionnaire']}>
-      <div>Accès à l'annuaire autorisé</div>
-    </PrivateRoute>
-  }
-/>
-
-
-
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute allowedRoles={['admin', 'gestionnaire', 'pelerin']}>
+                <Outlet />
+              </PrivateRoute>
+            }
+          >
+            <Route path="admin" element={<DashboardAdmin />} />
+            <Route path="gestionnaire" element={<DashboardGestionnaire />} />
+            <Route path="pelerin" element={<DashboardPelerin />} />
+          </Route>
+          <Route
+            path="/annuaire"
+            element={
+              <PrivateRoute allowedRoles={['admin', 'gestionnaire']}>
+                <AnnuaireAdmin />
+              </PrivateRoute>
+            }
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
