@@ -5,10 +5,10 @@ import { getPelerins, searchPelerins, exportPelerins, importPelerins } from '../
 const AnnuaireAdmin = () => {
   const [pelerins, setPelerins] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);  
+  const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(25);  
+  const [limit, setLimit] = useState(25);
   const navigate = useNavigate();
 
   // Fonction pour récupérer les pèlerins
@@ -139,10 +139,10 @@ const AnnuaireAdmin = () => {
           </thead>
           <tbody>
             {pelerins.map((pelerin) => (
-              <tr key={p.id} onClick={() => navigate(`/pelerins/${p.id}`)}>
+              <tr key={pelerin.id} onClick={() => navigate(`/pelerins/${pelerin.id}`)}>
                 <td>{pelerin.nom}</td>
                 <td>{pelerin.prenom}</td>
-                <td>{pelerin.mail}</td>
+                <td>{pelerin.mail || 'N/A'}</td>
                 <td>{pelerin.telephone_portable || 'N/A'}</td>
                 <td>{pelerin.ville || 'N/A'}</td>
                 <td>{pelerin.commandes?.[0]?.statut || 'Aucune'}</td>
