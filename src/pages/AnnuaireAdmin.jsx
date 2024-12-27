@@ -5,7 +5,7 @@ import { getPelerins, searchPelerins, exportPelerins, importPelerins } from '../
 const AnnuaireAdmin = () => {
   const [pelerins, setPelerins] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(null);  
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(25);
