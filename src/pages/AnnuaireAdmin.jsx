@@ -11,6 +11,7 @@ const AnnuaireAdmin = () => {
   useEffect(() => {
     console.log('useEffect déclenché dans AnnuaireAdmin.');
     const fetchData = async () => {
+      console.log('Début du fetchData pour AnnuaireAdmin.');
       setLoading(true);
       setError(null);
       try {
@@ -18,15 +19,17 @@ const AnnuaireAdmin = () => {
         console.log('Réponse API reçue :', response);
         const { success, data } = response;
         if (success && Array.isArray(data)) {
-          setPelerins(data); // Mettre à jour les pèlerins si data est un tableau
+          console.log('Données validées, mise à jour de pelerins.');
+          setPelerins(data);
         } else {
-          console.error('Données reçues dans un format inattendu :', response);
+          console.error('Format inattendu dans la réponse API :', response);
           setError('Format de données inattendu.');
         }
       } catch (err) {
         console.error('Erreur lors du chargement des données :', err.message || err);
         setError('Impossible de charger les données.');
       } finally {
+        console.log('Fin du fetchData pour AnnuaireAdmin.');
         setLoading(false);
       }
     };
