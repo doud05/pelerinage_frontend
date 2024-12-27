@@ -139,7 +139,7 @@ const AnnuaireAdmin = () => {
           </thead>
           <tbody>
             {pelerins.map((pelerin) => (
-              <tr key={pelerin.id} onClick={() => navigate(`/pelerins/${pelerin.id}`)}>
+              <tr key={p.id} onClick={() => navigate(`/pelerins/${p.id}`)}>
                 <td>{pelerin.nom}</td>
                 <td>{pelerin.prenom}</td>
                 <td>{pelerin.mail}</td>
