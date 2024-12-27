@@ -13,13 +13,15 @@ const AnnuaireAdmin = () => {
       setError(null);
       try {
         const response = await getPelerins(1, 10); // Charger la première page avec 10 pèlerins
-        const { data } = response;
-        if (Array.isArray(data)) {
+        const { success, data } = response;
+
+        if (success && Array.isArray(data)) {
           setPelerins(data); // Mettre à jour les pèlerins si data est un tableau
         } else {
           console.error('Données reçues dans un format inattendu :', data);
           setError('Format de données inattendu.');
         }
+
         console.log('Données récupérées depuis l’API :', data);
       } catch (err) {
         console.error('Erreur lors du chargement des données :', err);
@@ -28,6 +30,7 @@ const AnnuaireAdmin = () => {
         setLoading(false);
       }
     };
+
     fetchData();
   }, []);
 
@@ -53,8 +56,8 @@ const AnnuaireAdmin = () => {
                 <td>{pelerin.id}</td>
                 <td>{pelerin.nom}</td>
                 <td>{pelerin.prenom}</td>
-                <td>{pelerin.ville}</td>
-                <td>{pelerin.telephone_portable || pelerin.telephone_fixe}</td>
+                <td>{pelerin.ville || 'Non spécifiée'}</td>
+                <td>{pelerin.telephone_portable || pelerin.telephone_fixe || 'Non spécifié'}</td>
               </tr>
             ))}
           </tbody>
