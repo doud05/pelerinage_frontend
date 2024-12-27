@@ -6,6 +6,7 @@ import DashboardAdmin from './pages/DashboardAdmin';
 import AnnuaireAdmin from './pages/AnnuaireAdmin';
 import NotFound from './pages/NotFound';
 import ErrorBoundary from './components/ErrorBoundary';
+import PrivateRoute from './routes/PrivateRoute';
 
 const App = () => {
   console.log('Routes chargées dans App.jsx.');
@@ -28,7 +29,11 @@ const App = () => {
           </Route>
           <Route
             path="/annuaire"
-            element={<AnnuaireAdmin />}
+            element={
+              <PrivateRoute allowedRoles={['admin', 'gestionnaire']}>
+                <AnnuaireAdmin />
+              </PrivateRoute>
+            }
           />
           <Route path="*" element={<NotFound />} />
         </Routes>
