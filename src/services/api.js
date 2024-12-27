@@ -31,18 +31,17 @@ api.interceptors.response.use(
         localStorage.setItem('token', newToken);
 
         error.config.headers.Authorization = `Bearer ${newToken}`;
-        return api.request(error.config); // Relancer la requête originale
+        return api.request(error.config);
       } catch (refreshError) {
         console.error('Erreur lors du rafraîchissement du token :', refreshError.message);
-        localStorage.removeItem('token'); // Supprimer le token expiré
-        window.location.href = '/login'; // Rediriger vers la connexion
+        localStorage.removeItem('token');
+        window.location.href = '/login';
       }
     }
     return Promise.reject(error);
   }
 );
 
-// Ajout explicite des exports
 export const login = async (credentials) => {
   try {
     const { data } = await api.post('/auth/login', credentials);
@@ -70,30 +69,17 @@ export const fetchUserProfile = async () => {
   }
 };
 
+export const getPelerins = async (page = 1, limit = 10) => {
+  try {
+    const response = await api.get(`/pelerins?page=${page}&limit=${limit}`);
+    return response.data; // Supposant { success: true, data: [...] }
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const logout = () => {
   localStorage.removeItem('token');
 };
-
-// Appels spécifiques pour la gestion des pèlerins
-export const getPelerins = async (page = 1, limit = 10) => {
-  const response = await fetch(`/api/pelerins?page=${page}&limit=${limit}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`, // Ajoutez un token si nécessaire
-    },
-  });
-  if (!response.ok) {
-    throw new Error('Erreur API');
-  }
-  return await response.json(); // Retourne un objet avec `success` et `data`
-};
-
-
-export const searchPelerins = (query) => api.get(`/pelerins/search?query=${query}`);
-export const exportPelerins = () => api.get('/pelerins/export', { responseType: 'blob' });
-export const importPelerins = (formData) => api.post('/pelerins/import', formData, {
-  headers: { 'Content-Type': 'multipart/form-data' },
-});
 
 export default api;
