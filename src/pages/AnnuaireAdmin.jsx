@@ -9,18 +9,16 @@ const AnnuaireAdmin = () => {
   console.log('Composant AnnuaireAdmin chargé.');
 
   useEffect(() => {
-    console.log('useEffect déclenché dans AnnuaireAdmin.');
     const fetchData = async () => {
-      console.log('Début du fetchData pour AnnuaireAdmin.');
-      setLoading(true);
-      setError(null);
       try {
-        const response = await getPelerins(1, 10); // Charger la première page avec 10 pèlerins
+        console.log('Début de fetchData dans AnnuaireAdmin.');
+        setLoading(true);
+        const response = await getPelerins(1, 10);
         console.log('Réponse API reçue :', response);
-        const { success, data } = response;
-        if (success && Array.isArray(data)) {
-          console.log('Données validées, mise à jour de pelerins.');
-          setPelerins(data);
+
+        if (response.success && Array.isArray(response.data)) {
+          console.log('Mise à jour des données de pelerins.');
+          setPelerins(response.data);
         } else {
           console.error('Format inattendu dans la réponse API :', response);
           setError('Format de données inattendu.');
@@ -29,12 +27,17 @@ const AnnuaireAdmin = () => {
         console.error('Erreur lors du chargement des données :', err.message || err);
         setError('Impossible de charger les données.');
       } finally {
-        console.log('Fin du fetchData pour AnnuaireAdmin.');
         setLoading(false);
+        console.log('Fin de fetchData dans AnnuaireAdmin.');
       }
     };
+
     fetchData();
   }, []);
+
+  if (error) {
+    console.error('Erreur affichée à l\'utilisateur :', error);
+  }
 
   return (
     <div style={{ backgroundColor: 'lightblue', padding: '20px' }}>
