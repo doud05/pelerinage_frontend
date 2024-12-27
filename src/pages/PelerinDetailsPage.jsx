@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { updatePelerin } from '../services/api';
+import { getPelerinById, updatePelerin } from '../services/api';
 
-const PelerinDetailsPage = ({ onUpdate }) => {
-  const { id } = useParams(); // Récupérer l'ID depuis l'URL
+const PelerinDetailsPage = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState(null); // Initialiser avec des données vides
+  const [formData, setFormData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Récupérer les données du pèlerin via l'ID
     const fetchPelerin = async () => {
       try {
         const response = await getPelerinById(id);
@@ -40,8 +39,7 @@ const PelerinDetailsPage = ({ onUpdate }) => {
     try {
       await updatePelerin(id, formData);
       alert('Mise à jour réussie !');
-      onUpdate();
-      navigate('/annuaire'); // Retourner à l'annuaire
+      navigate('/annuaire');
     } catch (err) {
       console.error('Erreur lors de la mise à jour :', err.message || err);
       setError('Erreur lors de la mise à jour.');
@@ -143,10 +141,15 @@ const PelerinDetailsPage = ({ onUpdate }) => {
       </section>
 
       {/* Boutons d'action */}
-      <div style={{ marginTop: '20px' }}>
-        <button onClick={handleUpdate} disabled={loading}>Mettre à jour</button>
-        <button onClick={() => navigate('/annuaire')} style={{ marginLeft: '10px' }}>Retour à l'annuaire</button>
-      </div>
+        <div style={{ marginTop: '20px' }}>
+          <button type="button" onClick={handleUpdate} disabled={loading}>
+            Mettre à jour
+          </button>
+          <button type="button" onClick={() => navigate('/annuaire')} style={{ marginLeft: '10px' }}>
+            Retour
+          </button>
+        </div>
+      </form>
     </div>
   );
 };
