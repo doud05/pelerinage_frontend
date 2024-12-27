@@ -17,18 +17,17 @@ const App = () => {
         <Routes>
           <Route path="/" element={<LoginRegister />} />
           <Route path="/login" element={<LoginRegister />} />
-          <Route path="/dashboard" element={<Outlet />}>
+          <Route
+            path="/dashboard"
+            element={<Outlet />}
+          >
             <Route path="admin" element={<DashboardAdmin />} />
             <Route path="gestionnaire" element={<DashboardGestionnaire />} />
             <Route path="pelerin" element={<DashboardPelerin />} />
           </Route>
           <Route
             path="/annuaire"
-            element={
-              <PrivateRoute allowedRoles={['admin', 'gestionnaire']}>
-                <AnnuaireAdmin />
-              </PrivateRoute>
-            }
+            element={<AnnuaireAdmin />}
           />
           <Route path="*" element={<NotFound />} />
         </Routes>
