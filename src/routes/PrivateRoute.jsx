@@ -29,6 +29,7 @@ const PrivateRoute = ({ allowedRoles = [] }) => {
   }
 
   console.log(`Accès autorisé pour l'utilisateur : ${user.email} avec le rôle ${user.role}`);
+  console.log('Rendu du composant enfant via <Outlet />.');
   return <Outlet />;
 };
 
