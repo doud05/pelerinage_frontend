@@ -19,9 +19,7 @@ const App = () => {
           <Route path="/login" element={<LoginRegister />} />
           <Route
             path="/dashboard"
-            element={
-              <Outlet />
-            }
+            element={<Outlet />}
           >
             <Route path="admin" element={<DashboardAdmin />} />
             <Route path="gestionnaire" element={<DashboardGestionnaire />} />
@@ -30,10 +28,9 @@ const App = () => {
           <Route
             path="/annuaire"
             element={
-              <>
-                {console.log('Route /annuaire atteinte.')}
+              <PrivateRoute allowedRoles={['admin', 'gestionnaire']}>
                 <AnnuaireAdmin />
-              </>
+              </PrivateRoute>
             }
           />
           <Route path="*" element={<NotFound />} />
