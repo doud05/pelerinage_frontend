@@ -1,12 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 const AnnuaireAdmin = () => {
-  console.log('Composant AnnuaireAdmin monté.');
+  const [pelerins, setPelerins] = useState([]);
+
+  useEffect(() => {
+    console.log('Composant AnnuaireAdmin monté.');
+    setPelerins([
+      { id: 1, nom: 'Dupont', prenom: 'Jean', mail: 'jean.dupont@example.com', ville: 'Paris' },
+    ]);
+  }, []);
 
   return (
     <div>
-      <h1>Test : Annuaire des Pèlerins</h1>
-      <p>Si vous voyez ce message, le composant React est correctement monté.</p>
+      <h1>Annuaire des Pèlerins</h1>
+      {pelerins.length > 0 ? (
+        <table>
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Prénom</th>
+              <th>Email</th>
+              <th>Ville</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pelerins.map((p) => (
+              <tr key={p.id}>
+                <td>{p.nom}</td>
+                <td>{p.prenom}</td>
+                <td>{p.mail}</td>
+                <td>{p.ville}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <p>Aucun pèlerin trouvé.</p>
+      )}
     </div>
   );
 };
