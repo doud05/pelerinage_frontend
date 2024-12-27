@@ -68,7 +68,7 @@ const AnnuaireAdmin = () => {
           </tbody>
         </table>
       ) : (
-        !loading && <p>Aucun pèlerin trouvé.</p>
+        !loading && !error && <p>Aucun pèlerin trouvé.</p>
       )}
     </div>
   );
