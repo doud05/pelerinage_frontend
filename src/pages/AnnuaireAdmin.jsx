@@ -5,10 +5,15 @@ const AnnuaireAdmin = () => {
 
   useEffect(() => {
     console.log('Composant AnnuaireAdmin monté.');
-    // Simuler des données pour vérifier le rendu
-    setPelerins([
-      { id: 1, nom: 'Dupont', prenom: 'Jean', mail: 'jean.dupont@example.com', ville: 'Paris' },
-    ]);
+    try {
+      // Simuler des données pour tester le rendu
+      setPelerins([
+        { id: 1, nom: 'Dupont', prenom: 'Jean', mail: 'jean.dupont@example.com', ville: 'Paris' },
+      ]);
+      console.log('Données simulées chargées :', pelerins);
+    } catch (error) {
+      console.error('Erreur lors du chargement des données simulées :', error);
+    }
   }, []);
 
   return (
