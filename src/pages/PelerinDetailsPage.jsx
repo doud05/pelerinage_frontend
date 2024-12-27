@@ -1,12 +1,33 @@
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { updatePelerin } from '../services/api';
 
-const PelerinDetailsPage = ({ pelerin, onUpdate }) => {
+const PelerinDetailsPage = ({ onUpdate }) => {
+  const { id } = useParams(); // Récupérer l'ID depuis l'URL
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ ...pelerin });
-  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState(null); // Initialiser avec des données vides
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    // Récupérer les données du pèlerin via l'ID
+    const fetchPelerin = async () => {
+      try {
+        const response = await getPelerinById(id);
+        if (response.success) {
+          setFormData(response.data);
+        } else {
+          setError('Impossible de charger les détails du pèlerin.');
+        }
+      } catch (err) {
+        console.error('Erreur lors de la récupération du pèlerin :', err.message || err);
+        setError('Erreur lors de la récupération des données.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPelerin();
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,19 +38,23 @@ const PelerinDetailsPage = ({ pelerin, onUpdate }) => {
     setLoading(true);
     setError(null);
     try {
-      await updatePelerin(pelerin.id, formData);
+      await updatePelerin(id, formData);
       alert('Mise à jour réussie !');
-      onUpdate(); // Rafraîchit les données si nécessaire
-      navigate('/annuaire'); // Retour à l'annuaire après la mise à jour
+      onUpdate();
+      navigate('/annuaire'); // Retourner à l'annuaire
     } catch (err) {
-      console.error('Erreur lors de la mise à jour :', err.response?.data || err.message);
-      setError('Erreur lors de la mise à jour. Vérifiez les champs.');
+      console.error('Erreur lors de la mise à jour :', err.message || err);
+      setError('Erreur lors de la mise à jour.');
     } finally {
       setLoading(false);
     }
   };
 
+  if (loading) return <p>Chargement...</p>;
+  if (error) return <p style={{ color: 'red' }}>{error}</p>;
+
   return (
+    
     <div style={{ padding: '20px' }}>
       <h1>Détails du pèlerin</h1>
       {loading && <p>Chargement...</p>}
