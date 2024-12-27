@@ -12,19 +12,19 @@ const AnnuaireAdmin = () => {
       setLoading(true);
       setError(null);
       try {
+        console.log('Appel API pour récupérer les pèlerins...');
         const response = await getPelerins(1, 10); // Charger la première page avec 10 pèlerins
-        const { success, data } = response;
+        console.log('Réponse brute de l’API :', response);
 
-        if (success && Array.isArray(data)) {
-          setPelerins(data); // Mettre à jour les pèlerins si data est un tableau
+        if (response.success && Array.isArray(response.data)) {
+          console.log('Données valides reçues :', response.data);
+          setPelerins(response.data); // Mettre à jour les pèlerins
         } else {
-          console.error('Données reçues dans un format inattendu :', data);
+          console.error('Données reçues dans un format inattendu :', response);
           setError('Format de données inattendu.');
         }
-
-        console.log('Données récupérées depuis l’API :', data);
       } catch (err) {
-        console.error('Erreur lors du chargement des données :', err);
+        console.error('Erreur lors de la récupération des données :', err);
         setError('Impossible de charger les données.');
       } finally {
         setLoading(false);
@@ -53,11 +53,11 @@ const AnnuaireAdmin = () => {
           <tbody>
             {pelerins.map((pelerin) => (
               <tr key={pelerin.id}>
-                <td>{pelerin.id}</td>
-                <td>{pelerin.nom}</td>
-                <td>{pelerin.prenom}</td>
-                <td>{pelerin.ville || 'Non spécifiée'}</td>
-                <td>{pelerin.telephone_portable || pelerin.telephone_fixe || 'Non spécifié'}</td>
+                <td>{pelerin.id || 'N/A'}</td>
+                <td>{pelerin.nom || 'N/A'}</td>
+                <td>{pelerin.prenom || 'N/A'}</td>
+                <td>{pelerin.ville || 'N/A'}</td>
+                <td>{pelerin.telephone_portable || pelerin.telephone_fixe || 'N/A'}</td>
               </tr>
             ))}
           </tbody>
