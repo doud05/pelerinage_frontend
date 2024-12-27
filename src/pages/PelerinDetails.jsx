@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { updatePelerin } from '../services/api';
 
 const PelerinDetailsPage = ({ pelerin, onUpdate }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({ ...pelerin });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -17,7 +19,8 @@ const PelerinDetailsPage = ({ pelerin, onUpdate }) => {
     try {
       await updatePelerin(pelerin.id, formData);
       alert('Mise à jour réussie !');
-      onUpdate(); // Rafraîchit les données
+      onUpdate(); // Rafraîchit les données si nécessaire
+      navigate('/annuaire'); // Retour à l'annuaire après la mise à jour
     } catch (err) {
       console.error('Erreur lors de la mise à jour :', err.response?.data || err.message);
       setError('Erreur lors de la mise à jour. Vérifiez les champs.');
@@ -64,11 +67,60 @@ const PelerinDetailsPage = ({ pelerin, onUpdate }) => {
         <input type="text" name="telephone_portable" value={formData.telephone_portable || ''} onChange={handleChange} placeholder="Téléphone portable" />
       </section>
 
-      {/* Ajoutez les autres blocs ici de manière similaire */}
+      {/* Bloc 4 : Contact d’urgence */}
+      <section>
+        <h2>Contact d’urgence</h2>
+        <input type="text" name="contact_urgence_nom" value={formData.contact_urgence_nom || ''} onChange={handleChange} placeholder="Nom" />
+        <input type="text" name="contact_urgence_prenom" value={formData.contact_urgence_prenom || ''} onChange={handleChange} placeholder="Prénom" />
+        <input type="text" name="contact_urgence_telephone" value={formData.contact_urgence_telephone || ''} onChange={handleChange} placeholder="Téléphone" />
+      </section>
+
+      {/* Bloc 5 : Contact des parents */}
+      <section>
+        <h2>Contact des parents</h2>
+        <input type="text" name="pere_nom" value={formData.pere_nom || ''} onChange={handleChange} placeholder="Nom du père" />
+        <input type="text" name="pere_prenom" value={formData.pere_prenom || ''} onChange={handleChange} placeholder="Prénom du père" />
+        <input type="text" name="pere_telephone" value={formData.pere_telephone || ''} onChange={handleChange} placeholder="Téléphone du père" />
+        <input type="email" name="mail_pere" value={formData.mail_pere || ''} onChange={handleChange} placeholder="Email du père" />
+        <input type="text" name="mere_nom" value={formData.mere_nom || ''} onChange={handleChange} placeholder="Nom de la mère" />
+        <input type="text" name="mere_prenom" value={formData.mere_prenom || ''} onChange={handleChange} placeholder="Prénom de la mère" />
+        <input type="text" name="mere_telephone" value={formData.mere_telephone || ''} onChange={handleChange} placeholder="Téléphone de la mère" />
+        <input type="email" name="mail_mere" value={formData.mail_mere || ''} onChange={handleChange} placeholder="Email de la mère" />
+      </section>
+
+      {/* Bloc 6 : Documents d’identité */}
+      <section>
+        <h2>Documents d’identité</h2>
+        <h3>Carte d’identité</h3>
+        <input type="text" name="carte_identite_numero" value={formData.carte_identite_numero || ''} onChange={handleChange} placeholder="Numéro" />
+        <input type="text" name="carte_identite_autorite_delivrance" value={formData.carte_identite_autorite_delivrance || ''} onChange={handleChange} placeholder="Autorité de délivrance" />
+        <input type="date" name="carte_identite_date_delivrance" value={formData.carte_identite_date_delivrance || ''} onChange={handleChange} />
+        <input type="date" name="carte_identite_date_validite" value={formData.carte_identite_date_validite || ''} onChange={handleChange} />
+
+        <h3>Passeport</h3>
+        <input type="text" name="passeport_numero" value={formData.passeport_numero || ''} onChange={handleChange} placeholder="Numéro" />
+        <input type="text" name="passeport_autorite_delivrance" value={formData.passeport_autorite_delivrance || ''} onChange={handleChange} placeholder="Autorité de délivrance" />
+        <input type="date" name="passeport_date_delivrance" value={formData.passeport_date_delivrance || ''} onChange={handleChange} />
+        <input type="date" name="passeport_date_validite" value={formData.passeport_date_validite || ''} onChange={handleChange} />
+
+        <h3>Titre de séjour</h3>
+        <input type="text" name="titre_sejour_numero" value={formData.titre_sejour_numero || ''} onChange={handleChange} placeholder="Numéro" />
+        <input type="text" name="titre_sejour_autorite_delivrance" value={formData.titre_sejour_autorite_delivrance || ''} onChange={handleChange} placeholder="Autorité de délivrance" />
+        <input type="date" name="titre_sejour_date_delivrance" value={formData.titre_sejour_date_delivrance || ''} onChange={handleChange} />
+        <input type="date" name="titre_sejour_date_validite" value={formData.titre_sejour_date_validite || ''} onChange={handleChange} />
+      </section>
+
+      {/* Bloc 7 : Autres informations */}
+      <section>
+        <h2>Autres informations</h2>
+        <input type="text" name="categorie" value={formData.categorie || ''} onChange={handleChange} placeholder="Catégorie" />
+        <textarea name="commentaire" value={formData.commentaire || ''} onChange={handleChange} placeholder="Commentaire"></textarea>
+      </section>
 
       {/* Boutons d'action */}
       <div style={{ marginTop: '20px' }}>
         <button onClick={handleUpdate} disabled={loading}>Mettre à jour</button>
+        <button onClick={() => navigate('/annuaire')} style={{ marginLeft: '10px' }}>Retour à l'annuaire</button>
       </div>
     </div>
   );
