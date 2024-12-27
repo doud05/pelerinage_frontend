@@ -6,7 +6,7 @@ const PelerinDetails = ({ pelerin, onClose, onUpdate }) => {
   const [formData, setFormData] = useState(pelerin);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
