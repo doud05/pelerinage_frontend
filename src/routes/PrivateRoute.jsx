@@ -11,7 +11,6 @@ const PrivateRoute = ({ allowedRoles = [] }) => {
   console.log('Utilisateur actuellement connecté :', user);
   console.log('Est autorisé ?', allowedRoles.includes(user?.role));
 
-
   if (!user) {
     console.warn('Utilisateur non connecté. Redirection vers /login.');
     return <Navigate to="/login" replace />;
