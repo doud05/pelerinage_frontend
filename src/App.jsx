@@ -4,6 +4,7 @@ import DashboardPelerin from './pages/DashboardPelerin';
 import DashboardGestionnaire from './pages/DashboardGestionnaire';
 import DashboardAdmin from './pages/DashboardAdmin';
 import AnnuaireAdmin from './pages/AnnuaireAdmin';
+import PelerinDetailsPage from './pages/PelerinDetailsPage';
 import NotFound from './pages/NotFound';
 import ErrorBoundary from './components/ErrorBoundary';
 
@@ -22,7 +23,9 @@ const App = () => {
             <Route path="pelerin" element={<DashboardPelerin />} />
           </Route>
           <Route path="/annuaire" element={<AnnuaireAdmin />} />
-          <Route path="/pelerins/:id" element={<PelerinDetailsPage />} />
+         <Routes>
+  <Route path="/pelerins/:id" element={<PelerinDetailsPage />} />
+</Routes>
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
