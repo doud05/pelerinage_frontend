@@ -42,6 +42,8 @@ api.interceptors.response.use(
   }
 );
 
+// Fonctions API
+
 export const login = async (credentials) => {
   try {
     const { data } = await api.post('/auth/login', credentials);
@@ -77,6 +79,18 @@ export const getPelerins = async (page = 1, limit = 25) => {
     return response.data; // Supposant { success: true, data: [...] }
   } catch (error) {
     console.error('Erreur lors de l\'appel API :', error.message || error);
+    throw error;
+  }
+};
+
+export const getPelerinById = async (id) => {
+  try {
+    console.log(`Appel API pour récupérer le pèlerin avec ID : ${id}`);
+    const response = await api.get(`/pelerins/${id}`);
+    console.log('Données reçues pour le pèlerin :', response.data);
+    return response.data; // Supposant { success: true, data: {...} }
+  } catch (error) {
+    console.error(`Erreur lors de la récupération du pèlerin avec ID ${id} :`, error.message || error);
     throw error;
   }
 };
