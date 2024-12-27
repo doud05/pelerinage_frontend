@@ -23,9 +23,7 @@ const App = () => {
             <Route path="pelerin" element={<DashboardPelerin />} />
           </Route>
           <Route path="/annuaire" element={<AnnuaireAdmin />} />
-         <Routes>
-  <Route path="/pelerins/:id" element={<PelerinDetailsPage />} />
-</Routes>
+          <Route path="/pelerins/:id" element={<PelerinDetailsPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
