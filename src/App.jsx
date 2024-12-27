@@ -34,7 +34,7 @@ const App = () => {
   path="/annuaire"
   element={
     <PrivateRoute allowedRoles={['admin', 'gestionnaire']}>
-      <AnnuaireAdmin />
+      <div>Accès à l'annuaire autorisé</div>
     </PrivateRoute>
   }
 />
