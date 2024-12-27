@@ -71,12 +71,16 @@ export const fetchUserProfile = async () => {
 
 export const getPelerins = async (page = 1, limit = 10) => {
   try {
+    console.log(`Appel API : /pelerins?page=${page}&limit=${limit}`);
     const response = await api.get(`/pelerins?page=${page}&limit=${limit}`);
+    console.log('Données reçues de l\'API :', response.data);
     return response.data; // Supposant { success: true, data: [...] }
   } catch (error) {
+    console.error('Erreur lors de l\'appel API :', error.message || error);
     throw error;
   }
 };
+
 
 export const logout = () => {
   localStorage.removeItem('token');
