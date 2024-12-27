@@ -8,7 +8,7 @@ const AnnuaireAdmin = () => {
   const [error, setError] = useState(null);  
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(25);
+  const [limit, setLimit] = useState(25);  
   const navigate = useNavigate();
 
   // Fonction pour récupérer les pèlerins
