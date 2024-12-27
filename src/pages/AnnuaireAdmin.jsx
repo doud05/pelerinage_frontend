@@ -5,13 +5,14 @@ const AnnuaireAdmin = () => {
 
   useEffect(() => {
     console.log('Composant AnnuaireAdmin monté.');
+    // Simuler des données pour vérifier le rendu
     setPelerins([
       { id: 1, nom: 'Dupont', prenom: 'Jean', mail: 'jean.dupont@example.com', ville: 'Paris' },
     ]);
   }, []);
 
   return (
-    <div>
+    <div style={{ backgroundColor: 'lightblue', padding: '20px' }}>
       <h1>Annuaire des Pèlerins</h1>
       {pelerins.length > 0 ? (
         <table>
