@@ -7,6 +7,7 @@ const AnnuaireAdmin = () => {
   const [error, setError] = useState(null);
 
   console.log('Composant AnnuaireAdmin chargé.');
+  console.log('Montage du composant AnnuaireAdmin.');
 
   useEffect(() => {
     const fetchData = async () => {
