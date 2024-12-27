@@ -140,18 +140,22 @@ const PelerinDetailsPage = () => {
         <textarea name="commentaire" value={formData.commentaire || ''} onChange={handleChange} placeholder="Commentaire"></textarea>
       </section>
 
-      {/* Boutons d'action */}
-        <div style={{ marginTop: '20px' }}>
-          <button type="button" onClick={handleUpdate} disabled={loading}>
-            Mettre à jour
-          </button>
-          <button type="button" onClick={() => navigate('/annuaire')} style={{ marginLeft: '10px' }}>
-            Retour
-          </button>
-        </div>
-      </form>
+       {/* Boutons d'action */}
+      <div style={{ marginTop: '20px' }}>
+        <button type="button" onClick={handleUpdate} disabled={loading}>
+          {loading ? 'Mise à jour...' : 'Mettre à jour'}
+        </button>
+        <button
+          type="button"
+          onClick={() => navigate('/annuaire')}
+          style={{ marginLeft: '10px' }}
+        >
+          Retour
+        </button>
+      </div>
     </div>
   );
 };
+
 
 export default PelerinDetailsPage;
