@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getPelerinById, updatePelerin } from '../services/api';
+import { getPelerinById, updatePelerin, deletePelerin } from '../services/api';
 
 const PelerinDetailsPage = () => {
   const { id } = useParams();
@@ -9,12 +9,16 @@ const PelerinDetailsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {  
+  useEffect(() => {
     const fetchPelerin = async () => {
       try {
         const response = await getPelerinById(id);
         if (response.success) {
-          setFormData(response.data);
+          const data = response.data;
+          setFormData({
+            ...data,
+            date_naissance: data.date_naissance || '', // Format JJ/MM/AAAA attendu
+          });
         } else {
           setError('Impossible de charger les détails du pèlerin.');
         }
@@ -42,7 +46,23 @@ const PelerinDetailsPage = () => {
       navigate('/annuaire');
     } catch (err) {
       console.error('Erreur lors de la mise à jour :', err.message || err);
-      setError('Erreur lors de la mise à jour.');
+      setError(err.response?.data?.message || 'Erreur lors de la mise à jour.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!window.confirm('Êtes-vous sûr de vouloir supprimer ce pèlerin ?')) return;
+    setLoading(true);
+    setError(null);
+    try {
+      await deletePelerin(id);
+      alert('Pèlerin supprimé avec succès !');
+      navigate('/annuaire');
+    } catch (err) {
+      console.error('Erreur lors de la suppression :', err.message || err);
+      setError('Erreur lors de la suppression.');
     } finally {
       setLoading(false);
     }
@@ -65,8 +85,25 @@ const PelerinDetailsPage = () => {
         <input type="text" name="titre" value={formData.titre || ''} onChange={handleChange} placeholder="Titre" />
         <input type="text" name="nom" value={formData.nom} onChange={handleChange} placeholder="Nom" required />
         <input type="text" name="prenom" value={formData.prenom} onChange={handleChange} placeholder="Prénom" required />
-        <input type="date" name="date_naissance" value={formData.date_naissance || ''} onChange={handleChange} />
-        <input type="text" value={formData.age || ''} disabled placeholder="Âge (calculé)" />
+        <input
+          type="date"
+          name="date_naissance"
+          value={
+            formData.date_naissance
+              ? formData.date_naissance.split('/').reverse().join('-') // Convert JJ/MM/AAAA to AAAA-MM-JJ
+              : ''
+          }
+          onChange={(e) => {
+            const formattedDate = e.target.value.split('-').reverse().join('/'); // Convert AAAA-MM-JJ to JJ/MM/AAAA
+            handleChange({ target: { name: 'date_naissance', value: formattedDate } });
+          }}
+        />
+        < <input
+          type="text"
+          value={formData.age || ''}
+          disabled
+          placeholder="Âge (calculé automatiquement)"
+        />
         <input type="text" name="lieu_naissance" value={formData.lieu_naissance || ''} onChange={handleChange} placeholder="Lieu de naissance" />
         <input type="text" name="metier" value={formData.metier || ''} onChange={handleChange} placeholder="Métier" />
         <input type="text" name="nationalite" value={formData.nationalite || ''} onChange={handleChange} placeholder="Nationalité" />
@@ -112,26 +149,135 @@ const PelerinDetailsPage = () => {
       </section>
 
       {/* Bloc 6 : Documents d’identité */}
-      <section>
-        <h2>Documents d’identité</h2>
-        <h3>Carte d’identité</h3>
-        <input type="text" name="carte_identite_numero" value={formData.carte_identite_numero || ''} onChange={handleChange} placeholder="Numéro" />
-        <input type="text" name="carte_identite_autorite_delivrance" value={formData.carte_identite_autorite_delivrance || ''} onChange={handleChange} placeholder="Autorité de délivrance" />
-        <input type="date" name="carte_identite_date_delivrance" value={formData.carte_identite_date_delivrance || ''} onChange={handleChange} />
-        <input type="date" name="carte_identite_date_validite" value={formData.carte_identite_date_validite || ''} onChange={handleChange} />
+     <section>
+  <h2>Documents d’identité</h2>
 
-        <h3>Passeport</h3>
-        <input type="text" name="passeport_numero" value={formData.passeport_numero || ''} onChange={handleChange} placeholder="Numéro" />
-        <input type="text" name="passeport_autorite_delivrance" value={formData.passeport_autorite_delivrance || ''} onChange={handleChange} placeholder="Autorité de délivrance" />
-        <input type="date" name="passeport_date_delivrance" value={formData.passeport_date_delivrance || ''} onChange={handleChange} />
-        <input type="date" name="passeport_date_validite" value={formData.passeport_date_validite || ''} onChange={handleChange} />
+  <h3>Carte d’identité</h3>
+  <input
+    type="text"
+    name="carte_identite_numero"
+    value={formData.carte_identite_numero || ''}
+    onChange={handleChange}
+    placeholder="Numéro"
+  />
+  <input
+    type="text"
+    name="carte_identite_autorite_delivrance"
+    value={formData.carte_identite_autorite_delivrance || ''}
+    onChange={handleChange}
+    placeholder="Autorité de délivrance"
+  />
+  <input
+    type="date"
+    name="carte_identite_date_delivrance"
+    value={
+      formData.carte_identite_date_delivrance
+        ? formData.carte_identite_date_delivrance.split('/').reverse().join('-') // JJ/MM/AAAA → AAAA-MM-JJ
+        : ''
+    }
+    onChange={(e) => {
+      const formattedDate = e.target.value.split('-').reverse().join('/'); // AAAA-MM-JJ → JJ/MM/AAAA
+      handleChange({ target: { name: 'carte_identite_date_delivrance', value: formattedDate } });
+    }}
+  />
+  <input
+    type="date"
+    name="carte_identite_date_validite"
+    value={
+      formData.carte_identite_date_validite
+        ? formData.carte_identite_date_validite.split('/').reverse().join('-')
+        : ''
+    }
+    onChange={(e) => {
+      const formattedDate = e.target.value.split('-').reverse().join('/');
+      handleChange({ target: { name: 'carte_identite_date_validite', value: formattedDate } });
+    }}
+  />
 
-        <h3>Titre de séjour</h3>
-        <input type="text" name="titre_sejour_numero" value={formData.titre_sejour_numero || ''} onChange={handleChange} placeholder="Numéro" />
-        <input type="text" name="titre_sejour_autorite_delivrance" value={formData.titre_sejour_autorite_delivrance || ''} onChange={handleChange} placeholder="Autorité de délivrance" />
-        <input type="date" name="titre_sejour_date_delivrance" value={formData.titre_sejour_date_delivrance || ''} onChange={handleChange} />
-        <input type="date" name="titre_sejour_date_validite" value={formData.titre_sejour_date_validite || ''} onChange={handleChange} />
-      </section>
+  <h3>Passeport</h3>
+  <input
+    type="text"
+    name="passeport_numero"
+    value={formData.passeport_numero || ''}
+    onChange={handleChange}
+    placeholder="Numéro"
+  />
+  <input
+    type="text"
+    name="passeport_autorite_delivrance"
+    value={formData.passeport_autorite_delivrance || ''}
+    onChange={handleChange}
+    placeholder="Autorité de délivrance"
+  />
+  <input
+    type="date"
+    name="passeport_date_delivrance"
+    value={
+      formData.passeport_date_delivrance
+        ? formData.passeport_date_delivrance.split('/').reverse().join('-')
+        : ''
+    }
+    onChange={(e) => {
+      const formattedDate = e.target.value.split('-').reverse().join('/');
+      handleChange({ target: { name: 'passeport_date_delivrance', value: formattedDate } });
+    }}
+  />
+  <input
+    type="date"
+    name="passeport_date_validite"
+    value={
+      formData.passeport_date_validite
+        ? formData.passeport_date_validite.split('/').reverse().join('-')
+        : ''
+    }
+    onChange={(e) => {
+      const formattedDate = e.target.value.split('-').reverse().join('/');
+      handleChange({ target: { name: 'passeport_date_validite', value: formattedDate } });
+    }}
+  />
+
+  <h3>Titre de séjour</h3>
+  <input
+    type="text"
+    name="titre_sejour_numero"
+    value={formData.titre_sejour_numero || ''}
+    onChange={handleChange}
+    placeholder="Numéro"
+  />
+  <input
+    type="text"
+    name="titre_sejour_autorite_delivrance"
+    value={formData.titre_sejour_autorite_delivrance || ''}
+    onChange={handleChange}
+    placeholder="Autorité de délivrance"
+  />
+  <input
+    type="date"
+    name="titre_sejour_date_delivrance"
+    value={
+      formData.titre_sejour_date_delivrance
+        ? formData.titre_sejour_date_delivrance.split('/').reverse().join('-')
+        : ''
+    }
+    onChange={(e) => {
+      const formattedDate = e.target.value.split('-').reverse().join('/');
+      handleChange({ target: { name: 'titre_sejour_date_delivrance', value: formattedDate } });
+    }}
+  />
+  <input
+    type="date"
+    name="titre_sejour_date_validite"
+    value={
+      formData.titre_sejour_date_validite
+        ? formData.titre_sejour_date_validite.split('/').reverse().join('-')
+        : ''
+    }
+    onChange={(e) => {
+      const formattedDate = e.target.value.split('-').reverse().join('/');
+      handleChange({ target: { name: 'titre_sejour_date_validite', value: formattedDate } });
+    }}
+  />
+</section>
 
       {/* Bloc 7 : Autres informations */}
       <section>
