@@ -1,8 +1,12 @@
 import React from 'react';
 
 const AnnuaireAdmin = () => {
-  console.log('AnnuaireAdmin est monté.');
-  return <div style={{ backgroundColor: 'lightblue' }}>Le composant AnnuaireAdmin fonctionne !</div>;
+  return (
+    <div style={{ backgroundColor: 'lightblue', padding: '20px' }}>
+      <h1>Annuaire des Pèlerins</h1>
+      <p>Le composant AnnuaireAdmin fonctionne.</p>
+    </div>
+  );
 };
 
 export default AnnuaireAdmin;
