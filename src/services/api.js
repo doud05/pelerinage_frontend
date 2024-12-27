@@ -75,10 +75,20 @@ export const logout = () => {
 };
 
 // Appels spécifiques pour la gestion des pèlerins
-export const getPelerins = (page, limit) => {
-  console.log(`Appel API: GET /pelerins?page=${page}&limit=${limit}`);
-  return api.get(`/pelerins?page=${page}&limit=${limit}`);
+export const getPelerins = async (page = 1, limit = 10) => {
+  const response = await fetch(`/api/pelerins?page=${page}&limit=${limit}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`, // Ajoutez un token si nécessaire
+    },
+  });
+  if (!response.ok) {
+    throw new Error('Erreur API');
+  }
+  return await response.json(); // Retourne un objet avec `success` et `data`
 };
+
 
 export const searchPelerins = (query) => api.get(`/pelerins/search?query=${query}`);
 export const exportPelerins = () => api.get('/pelerins/export', { responseType: 'blob' });
