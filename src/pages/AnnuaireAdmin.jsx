@@ -1,72 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { getPelerins } from '../services/api';
+import React from 'react';
 
 const AnnuaireAdmin = () => {
-  const [pelerins, setPelerins] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    console.log('Composant AnnuaireAdmin monté.');
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        console.log('Appel API pour récupérer les pèlerins...');
-        const response = await getPelerins(1, 10); // Charger la première page avec 10 pèlerins
-        console.log('Réponse brute de l’API :', response);
-
-        if (response.success && Array.isArray(response.data)) {
-          console.log('Données valides reçues :', response.data);
-          setPelerins(response.data); // Mettre à jour les pèlerins
-        } else {
-          console.error('Données reçues dans un format inattendu :', response);
-          setError('Format de données inattendu.');
-        }
-      } catch (err) {
-        console.error('Erreur lors de la récupération des données :', err);
-        setError('Impossible de charger les données.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  return (
-    <div style={{ backgroundColor: 'lightblue', padding: '20px' }}>
-      <h1>Annuaire des Pèlerins</h1>
-      {loading && <p>Chargement des données...</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {!loading && !error && pelerins.length > 0 ? (
-        <table border="1" style={{ width: '100%', textAlign: 'left' }}>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nom</th>
-              <th>Prénom</th>
-              <th>Ville</th>
-              <th>Téléphone</th>
-            </tr>
-          </thead>
-          <tbody>
-            {pelerins.map((pelerin) => (
-              <tr key={pelerin.id}>
-                <td>{pelerin.id || 'N/A'}</td>
-                <td>{pelerin.nom || 'N/A'}</td>
-                <td>{pelerin.prenom || 'N/A'}</td>
-                <td>{pelerin.ville || 'N/A'}</td>
-                <td>{pelerin.telephone_portable || pelerin.telephone_fixe || 'N/A'}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        !loading && <p>Aucun pèlerin trouvé.</p>
-      )}
-    </div>
-  );
+  console.log('AnnuaireAdmin est monté.');
+  return <h1>Annuaire Admin est visible</h1>;
 };
 
 export default AnnuaireAdmin;
