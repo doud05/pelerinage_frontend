@@ -16,15 +16,15 @@ const AnnuaireAdmin = () => {
       try {
         const response = await getPelerins(1, 10); // Charger la première page avec 10 pèlerins
         console.log('Réponse API reçue :', response);
-        const { data } = response;
-        if (Array.isArray(data)) {
+        const { success, data } = response;
+        if (success && Array.isArray(data)) {
           setPelerins(data); // Mettre à jour les pèlerins si data est un tableau
         } else {
-          console.error('Données reçues dans un format inattendu :', data);
+          console.error('Données reçues dans un format inattendu :', response);
           setError('Format de données inattendu.');
         }
       } catch (err) {
-        console.error('Erreur lors du chargement des données :', err);
+        console.error('Erreur lors du chargement des données :', err.message || err);
         setError('Impossible de charger les données.');
       } finally {
         setLoading(false);
@@ -56,7 +56,7 @@ const AnnuaireAdmin = () => {
                 <td>{pelerin.nom}</td>
                 <td>{pelerin.prenom}</td>
                 <td>{pelerin.ville}</td>
-                <td>{pelerin.telephone_portable || pelerin.telephone_fixe}</td>
+                <td>{pelerin.telephone_portable || pelerin.telephone_fixe || 'N/A'}</td>
               </tr>
             ))}
           </tbody>
