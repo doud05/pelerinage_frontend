@@ -81,7 +81,6 @@ export const getPelerins = async (page = 1, limit = 10) => {
   }
 };
 
-
 export const logout = () => {
   localStorage.removeItem('token');
 };
