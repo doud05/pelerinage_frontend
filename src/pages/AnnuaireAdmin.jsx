@@ -12,8 +12,14 @@ const AnnuaireAdmin = () => {
       setLoading(true);
       setError(null);
       try {
-        const { data } = await getPelerins(1, 10); // Charger la première page avec 10 pèlerins
-        setPelerins(data);
+        const response = await getPelerins(1, 10); // Charger la première page avec 10 pèlerins
+        const { data } = response;
+        if (Array.isArray(data)) {
+          setPelerins(data); // Mettre à jour les pèlerins si data est un tableau
+        } else {
+          console.error('Données reçues dans un format inattendu :', data);
+          setError('Format de données inattendu.');
+        }
         console.log('Données récupérées depuis l’API :', data);
       } catch (err) {
         console.error('Erreur lors du chargement des données :', err);
@@ -31,22 +37,24 @@ const AnnuaireAdmin = () => {
       {loading && <p>Chargement des données...</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {!loading && !error && pelerins.length > 0 ? (
-        <table>
+        <table border="1" style={{ width: '100%', textAlign: 'left' }}>
           <thead>
             <tr>
+              <th>ID</th>
               <th>Nom</th>
               <th>Prénom</th>
-              <th>Email</th>
               <th>Ville</th>
+              <th>Téléphone</th>
             </tr>
           </thead>
           <tbody>
-            {pelerins.map((p) => (
-              <tr key={p.id}>
-                <td>{p.nom}</td>
-                <td>{p.prenom}</td>
-                <td>{p.mail}</td>
-                <td>{p.ville}</td>
+            {pelerins.map((pelerin) => (
+              <tr key={pelerin.id}>
+                <td>{pelerin.id}</td>
+                <td>{pelerin.nom}</td>
+                <td>{pelerin.prenom}</td>
+                <td>{pelerin.ville}</td>
+                <td>{pelerin.telephone_portable || pelerin.telephone_fixe}</td>
               </tr>
             ))}
           </tbody>
