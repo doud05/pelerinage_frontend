@@ -30,7 +30,14 @@ const App = () => {
   <Route path="pelerin" element={<DashboardPelerin />} />
 </Route>
 
-<Route path="/annuaire" element={<AnnuaireAdmin />} />
+<Route
+  path="/annuaire"
+  element={
+    <PrivateRoute allowedRoles={['admin', 'gestionnaire']}>
+      <AnnuaireAdmin />
+    </PrivateRoute>
+  }
+/>
 
 
 
