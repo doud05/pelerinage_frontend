@@ -9,6 +9,8 @@ const PrivateRoute = ({ allowedRoles = [] }) => {
   console.log('PrivateRoute chargé.');
   console.log('Rôles autorisés pour cette route :', allowedRoles);
   console.log('Utilisateur actuellement connecté :', user);
+  console.log('Est autorisé ?', allowedRoles.includes(user?.role));
+
 
   if (!user) {
     console.warn('Utilisateur non connecté. Redirection vers /login.');
