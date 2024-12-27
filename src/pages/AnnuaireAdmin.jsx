@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { getPelerins, searchPelerins, exportPelerins, importPelerins } from '../services/api';
+import PelerinDetails from './PelerinDetails'; // Nouveau composant pour afficher les détails
 
 const AnnuaireAdmin = () => {
   const [pelerins, setPelerins] = useState([]);
+  const [selectedPelerin, setSelectedPelerin] = useState(null); // Pèlerin sélectionné
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -124,7 +126,7 @@ const AnnuaireAdmin = () => {
       {loading && <p>Chargement...</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {!loading && !error && pelerins.length > 0 ? (
-        <table border="1" style={{ width: '100%', textAlign: 'left', marginBottom: '20px' }}>
+        <table border="1" style={{ width: '100%', textAlign: 'left', marginBottom: '20px', cursor: 'pointer' }}>
           <thead>
             <tr>
               <th>Nom</th>
@@ -137,7 +139,7 @@ const AnnuaireAdmin = () => {
           </thead>
           <tbody>
             {pelerins.map((pelerin) => (
-              <tr key={pelerin.id}>
+              <tr key={pelerin.id} onClick={() => setSelectedPelerin(pelerin)}>
                 <td>{pelerin.nom}</td>
                 <td>{pelerin.prenom}</td>
                 <td>{pelerin.mail}</td>
@@ -171,6 +173,18 @@ const AnnuaireAdmin = () => {
           <option value="50">50</option>
         </select>
       </div>
+
+      {/* Détails du pèlerin */}
+      {selectedPelerin && (
+        <PelerinDetails
+          pelerin={selectedPelerin}
+          onClose={() => setSelectedPelerin(null)}
+          onUpdate={() => {
+            fetchPelerins();
+            setSelectedPelerin(null);
+          }}
+        />
+      )}
     </div>
   );
 };
