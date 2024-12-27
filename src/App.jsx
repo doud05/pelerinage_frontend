@@ -25,7 +25,7 @@ const App = () => {
             <Route path="gestionnaire" element={<DashboardGestionnaire />} />
             <Route path="pelerin" element={<DashboardPelerin />} />
           </Route>
-         <Route
+  <Route
   path="/annuaire"
   element={
     <PrivateRoute allowedRoles={['admin', 'gestionnaire']}>
@@ -36,6 +36,7 @@ const App = () => {
     </PrivateRoute>
   }
 />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
