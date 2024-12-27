@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getPelerins, searchPelerins, exportPelerins, importPelerins } from '../services/api';
-import PelerinDetails from './PelerinDetails'; // Nouveau composant pour afficher les détails
 
 const AnnuaireAdmin = () => {
   const [pelerins, setPelerins] = useState([]);
-  const [selectedPelerin, setSelectedPelerin] = useState(null); // Pèlerin sélectionné
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [page, setPage] = useState(1); 
+  const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(25);
+  const navigate = useNavigate();
 
   // Fonction pour récupérer les pèlerins
   const fetchPelerins = async () => {
@@ -139,7 +139,7 @@ const AnnuaireAdmin = () => {
           </thead>
           <tbody>
             {pelerins.map((pelerin) => (
-              <tr key={pelerin.id} onClick={() => setSelectedPelerin(pelerin)}>
+              <tr key={pelerin.id} onClick={() => navigate(`/pelerins/${pelerin.id}`)}>
                 <td>{pelerin.nom}</td>
                 <td>{pelerin.prenom}</td>
                 <td>{pelerin.mail}</td>
@@ -173,18 +173,6 @@ const AnnuaireAdmin = () => {
           <option value="50">50</option>
         </select>
       </div>
-
-      {/* Détails du pèlerin */}
-      {selectedPelerin && (
-        <PelerinDetails
-          pelerin={selectedPelerin}
-          onClose={() => setSelectedPelerin(null)}
-          onUpdate={() => {
-            fetchPelerins();
-            setSelectedPelerin(null);
-          }}
-        />
-      )}
     </div>
   );
 };
