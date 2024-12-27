@@ -8,8 +8,8 @@ const AnnuaireAdmin = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(1); 
+  const [limit, setLimit] = useState(25);
 
   // Fonction pour récupérer les pèlerins
   const fetchPelerins = async () => {
