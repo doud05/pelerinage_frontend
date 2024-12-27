@@ -93,6 +93,24 @@ export const searchPelerins = async (query) => {
   }
 };
 
+export const updatePelerin = async (id, data) => {
+  try {
+    const response = await api.put(`/pelerins/${id}`, data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deletePelerin = async (id) => {
+  try {
+    const response = await api.delete(`/pelerins/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const exportPelerins = async () => {
   try {
     console.log('Appel API pour exporter les pèlerins : /pelerins/export');
