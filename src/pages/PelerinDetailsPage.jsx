@@ -41,6 +41,7 @@ const PelerinDetailsPage = () => {
     setLoading(true);
     setError(null);
     try {
+      console.log('Données envoyées au backend :', formData);
       await updatePelerin(id, formData);
       alert('Mise à jour réussie !');
       navigate('/annuaire');
